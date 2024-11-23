@@ -409,3 +409,14 @@ FodyWeavers.xsd
 # Additional files built by Visual Studio
 
 # End of https://www.toptal.com/developers/gitignore/api/visualstudio
+
+
+
+
+!SFML/lib/Debug
+!SFML/*
+!Eris_Utility/include/*
+!Eris_Utility/premake.lua
+!Eris_Utility/src/*
+!3rd_party_licenses/*
+!premake/*
