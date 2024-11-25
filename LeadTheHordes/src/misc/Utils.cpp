@@ -1,9 +1,6 @@
 #include "Hordes_pch.h"
 #include "Utils.h"
 
-#include <unordered_map>
-#include <string>
-#include <fstream>
 #include <regex>
 
 
@@ -36,7 +33,7 @@ bool str2bool(const char* str) {
 
 
 
-std::unordered_map<std::string, std::string> Utils::mapFromIni(std::string path, std::string errorKey) {
+std::unordered_map<std::string, std::string> mapFromIni(std::string path, std::string errorKey) {
 	std::ifstream ifs = std::ifstream(path);
 
 	std::string line = std::string();

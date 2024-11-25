@@ -21,8 +21,8 @@
 #include <SFML/Graphics.hpp>
 #include <SFML/Audio.hpp>
 
-#include "Eris_Utility/Log.h"
 #include "Eris_Utility/_Time.h"
+#include "Eris_Utility/Log.h"
 
 #include "core/dt.h"
 #include "misc/Utils.h"

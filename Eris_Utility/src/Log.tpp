@@ -1,5 +1,7 @@
 #pragma once
 
+//<3// thanks to https://codereview.stackexchange.com/questions/187183/create-a-c-string-using-printf-style-formatting printf-like variadic templates
+
 template<typename Fu, typename Fi, typename H, typename B>
 void Log::info(Fu func_name, Fi file_name, int codeline, H head, B body, ...) {
 	char buf[256];

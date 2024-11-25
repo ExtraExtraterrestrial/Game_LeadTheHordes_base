@@ -1,20 +1,17 @@
 #pragma once
 
-//<3// thanks to https://codereview.stackexchange.com/questions/187183/create-a-c-string-using-printf-style-formatting printf-like variadic templates
-
-#include <fstream>
 #include <cstdarg>
 #include <iomanip>
-#include <iostream>
-#include <string>
+#include <cstring>
+
 #include "_Time.h"
 
 #if defined(__linux__) || defined(LINUX)
-	constexpr char		DIR_DELIMITER		= '/';
-	const string		NULL_FILE_REDIRECT	= " 2> /dev/null";
+	constexpr char		DIR_DELIMITER = 	'/';
+	#define				NULL_FILE_REDIRECT  " 2> /dev/null"
 #elif defined(_WIN32)
-	constexpr char		DIR_DELIMITER		= '\\';
-	const std::string	NULL_FILE_REDIRECT	= " 2> nul";
+	constexpr char		DIR_DELIMITER =	 	'\\';
+	#define				NULL_FILE_REDIRECT  " 2> nul"
 #else
 	#error				_WIN32, __linux__ and LINUX undefined - system not recognized
 #endif // defined(__linux__) or defined(LINUX)
@@ -28,20 +25,23 @@
 	constexpr char		LOG_DEBUG_CHAR		= 'R';		// D if debug, R if release
 #endif
 
+
+
 class Log {
 public:
 	Log(const Log&) = delete;
 	~Log();
 private:
-	const enum ThreatLevels : uint8_t {		// Warning level to log
+	enum ThreatLevels : int {		// Warning level to log
 		ErrorLvl, WarningLvl, InfoLvl
 	}; ThreatLevels showThreatLevel;
 
-	const enum VerboseLevels : uint8_t {		// Head, or head and body
+	enum VerboseLevels : int {		// Head, or head and body
 		NoVerbose, LowVerbose, FullVerbose
 	}; VerboseLevels verboseLevel;
 
-	char logFilePath[100];
+	char logFilePath[128];
+	char commandBuffer[128];
 
 #pragma warning(suppress : 4251) // this file will be compiled with the rest of the code so this warning is superfluous
 	std::ofstream logFile;
@@ -50,18 +50,18 @@ private:
 	char line[128];			// remember to change it each time
 
 	void startup();
-	Log(uint8_t threatLevel = 2, uint8_t verboseLevel = 2);
+	Log(int threatLevel = 2, int verboseLevel = 2);
 	static Log instance;
 
 public:
 	static Log& Get();
 
-	inline void setLevel(uint8_t threatLevel, uint8_t verboseLevel) {
+	inline void setLevel(int threatLevel, int verboseLevel) {
 		this->showThreatLevel = (ThreatLevels)threatLevel;
 		this->verboseLevel = (VerboseLevels)verboseLevel;
 	}
-	inline void setThreatLevel(uint8_t threatLevel) { this->showThreatLevel = (ThreatLevels)threatLevel; }
-	inline void setVerboseLevel(uint8_t verbLevel) { this->showThreatLevel = (ThreatLevels)verbLevel; }
+	inline void setThreatLevel(int threatLevel) { this->showThreatLevel = (ThreatLevels)threatLevel; }
+	inline void setVerboseLevel(int verbLevel) { this->showThreatLevel = (ThreatLevels)verbLevel; }
 
 	// definitions in Log.tpp since they're templates
 	template<typename Fu = std::string_view, typename Fi = std::string_view, typename H = std::string_view, typename B = std::string_view>
@@ -95,7 +95,9 @@ public:
 
 #include "../src/Log.tpp"
 
-#ifdef PREMADE_MACROS
+// copy and paste into your code!
+// macros with _R suffix will work in release
+#ifdef ERIS_UTILITY_PREMADE_MACROS
 
 // ErisUtility _Time
 #define			T_PROGRAM_START_TIME			_Time::s_programStartTime.getStr()		// returns string&, safe for file naming
@@ -114,27 +116,4 @@ public:
 #define			LOG_SUCC(...)				Log::Get().success(__FUNCTION__, __LOG_FILENAME__, __LINE__, __VA_ARGS__)	// head, body and args to format body in c-style
 #define			LOG_ERR(...)				Log::Get().error(__FUNCTION__, __LOG_FILENAME__, __LINE__, __VA_ARGS__)		// head, body and args to format body in c-style
 
-#ifdef			_DEBUG
-#define			LOG_INFO_D(...)		Log::Get().info(__FUNCTION__, __LOG_FILENAME__, __LINE__, __VA_ARGS__)		// head, body and args to format body in c-style
-#define			LOG_WARN_D(...)		Log::Get().warn(__FUNCTION__, __LOG_FILENAME__, __LINE__, __VA_ARGS__)		// head, body and args to format body in c-style
-#define			LOG_SUCC_D(...)		Log::Get().success(__FUNCTION__, __LOG_FILENAME__, __LINE__, __VA_ARGS__)	// head, body and args to format body in c-style
-#define			LOG_ERR_D(...)		Log::Get().error(__FUNCTION__, __LOG_FILENAME__, __LINE__, __VA_ARGS__)		// head, body and args to format body in c-style
-
-#define			LOG_INFO_R(...)
-#define			LOG_WARN_R(...)
-#define			LOG_SUCC_R(...)
-#define			LOG_ERR_R(...)
-// macros with _R suffix will work in release
-#else			// !_DEBUG
-#define			LOG_INFO_R(...)				Log::Get().info(__FUNCTION__, __LOG_FILENAME__, __LINE__, __VA_ARGS__)		// head, body and args to format body in c-style
-#define			LOG_WARN_R(...)				Log::Get().warn(__FUNCTION__, __LOG_FILENAME__, __LINE__, __VA_ARGS__)		// head, body and args to format body in c-style
-#define			LOG_SUCC_R(...)				Log::Get().success(__FUNCTION__, __LOG_FILENAME__, __LINE__, __VA_ARGS__)	// head, body and args to format body in c-style
-#define			LOG_ERR_R(...)				Log::Get().error(__FUNCTION__, __LOG_FILENAME__, __LINE__, __VA_ARGS__)		// head, body and args to format body in c-style
-
-#define			LOG_INFO_D(...)
-#define			LOG_WARN_D(...)
-#define			LOG_SUCC_D(...)
-#define			LOG_ERR_D(...)
-#endif				// _DEBUG
-
-#endif //PREMADE_MACROS
+#endif //ERIS_UTILITY_PREMADE_MACROS

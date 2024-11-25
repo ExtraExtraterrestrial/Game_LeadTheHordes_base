@@ -19,10 +19,6 @@ inline void GameEngine::initWindow() {
 
 	settings.win_ini = Utils::mapFromIni(settings.win_configFile);
 
-	for (auto x : settings.win_ini) {
-		std::cout << "\npair : " << x.first << ": " << x.second << "\n";
-	}
-
 	LOG_ASSERT(settings.win_ini["__error__"] != "", settings.win_ini["__error__"], "Please check the file " + settings.win_configFile);
 
 

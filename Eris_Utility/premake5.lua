@@ -1,7 +1,9 @@
 project "Eris_Utility"
 	kind "StaticLib"
-	staticruntime "off"
+	staticruntime "on"
 	language "C++"
+	cppdialect "C++20"
+	systemversion "latest"
 
 	architecture "x86_64"
 	
@@ -11,9 +13,11 @@ project "Eris_Utility"
 		"Dist"
 	}
 
-	outputdir = "%{cfg.system}_%{cfg.buildcfg}-%{cfg.architecture}"
-	targetdir ("lib/" .. outputdir)
-	objdir ("obj/" .. outputdir)
+	outputdirname = "%{cfg.system}_%{cfg.buildcfg}-%{cfg.architecture}_" .. _ACTION
+	outputdir = "lib/" .. outputdirname
+
+	targetdir (outputdir)
+	objdir ("obj/" .. outputdirname)
 
 	files {
 		"include/%{prj.name}/**.h",
@@ -25,20 +29,15 @@ project "Eris_Utility"
 		"include"
 	}
 
-	disablewarnings {
-		-- 'type' : class 'type1' needs to have dll-interface to be used by clients of class 'type2'
-		-- "4251" -- project will be specifically compiled for different compilers separately (will solve issue if I'll decide otherwise)
-	}
-
-	filter "system:windows"
-		cppdialect "C++17"
-		systemversion "latest"
 
 	filter "configurations:Debug"
 		symbols "On"
+		runtime "Debug"
 
 	filter "configurations:Release"
 		optimize "On"
+		runtime "Release"
 
 	filter "configurations:Dist"
 		optimize "On"
+		runtime "Release"
