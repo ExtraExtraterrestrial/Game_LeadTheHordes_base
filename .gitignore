@@ -411,7 +411,7 @@ FodyWeavers.xsd
 # End of https://www.toptal.com/developers/gitignore/api/visualstudio
 
 
-Eris_Utility/lib/**
+Eris_Utility/**
 
 !SFML/**
 !Eris_Utility/include/**
