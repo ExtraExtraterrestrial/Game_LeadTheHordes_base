@@ -10,10 +10,10 @@ TODO:
 [0.0.0.0] setting things up
 - Add multithreading safety to Eris_Utility
 - Change dynamic SFML to static SFML
-* Rework Eris_Utility for increased compatility between different compilers
-* Add Eris_Utility
-* Premake is ready
-* Set up SFML
++ Rework Eris_Utility for increased compatility between different compilers
++ Add Eris_Utility
++ Premake is ready
++ Set up SFML
 
 
 

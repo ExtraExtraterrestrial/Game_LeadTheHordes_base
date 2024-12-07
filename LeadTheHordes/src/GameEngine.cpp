@@ -67,8 +67,9 @@ void GameEngine::run() {
 	float frame = 0;
 	while (window.isOpen()) {
 		update();
+
 		frame += dt::s();
-		if (frame > 1 / settings.fps) {
+		if (frame > settings.defaultFrameDuration) {
 			render();
 			frame = 0;
 		}
@@ -93,10 +94,11 @@ void GameEngine::update_SFMLEvents() {
 	}
 }
 void GameEngine::render() {
+	sf::CircleShape shape(100.f);
 
 	window.clear();
 
-
+	window.draw(shape);
 	window.display();
 }
 

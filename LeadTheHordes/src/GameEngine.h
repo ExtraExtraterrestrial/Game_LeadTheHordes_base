@@ -40,6 +40,7 @@ private: // structs
 		std::unordered_map<std::string, int16_t> keyBinds_map;
 
 		float fps;
+		float defaultFrameDuration;
 		std::string win_title;
 
 		sf::VideoMode win_videoMode;
@@ -48,9 +49,10 @@ private: // structs
 
 
 		Settings(std::string_view winpath, std::string_view keypath, float fps, std::string_view title) 
-			: win_contextSettings(sf::ContextSettings()),
-			  win_configFile(winpath), keyBinds_configFile(keypath),
-			  fps(fps), win_title(title)
+			: win_contextSettings(sf::ContextSettings())
+			, win_configFile(winpath), keyBinds_configFile(keypath)
+			, fps(fps), defaultFrameDuration(1.f/fps)
+			, win_title(title)
 		{
 		}
 
