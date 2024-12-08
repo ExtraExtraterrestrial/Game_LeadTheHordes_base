@@ -1,6 +1,7 @@
 #include <chrono>
 #include <ctime>
 #include <cstring>
+#include <string>
 
 #include "Eris_Utility/_Time.h"
 
