@@ -7,22 +7,22 @@
 #include "_Time.h"
 
 #if defined(__linux__) || defined(LINUX)
-	constexpr char		DIR_DELIMITER = 	'/';
+	#define				DIR_DELIMITER	 	"/"
 	#define				NULL_FILE_REDIRECT  " 2> /dev/null"
 #elif defined(_WIN32)
-	constexpr char		DIR_DELIMITER =	 	'\\';
+	#define				DIR_DELIMITER	 	"\\"
 	#define				NULL_FILE_REDIRECT  " 2> nul"
 #else
 	#error				_WIN32, __linux__ and LINUX undefined - system not recognized
 #endif // defined(__linux__) or defined(LINUX)
 
 //<3// thanks to https://stackoverflow.com/a/8488201/16614732 for the line below
-#define __LOG_FILENAME__ (std::strrchr(__FILE__, DIR_DELIMITER) ? std::strrchr(__FILE__, DIR_DELIMITER) + 1 : __FILE__)
+#define __LOG_FILENAME__ (std::strrchr(__FILE__, DIR_DELIMITER[0]) ? std::strrchr(__FILE__, DIR_DELIMITER[0]) + 1 : __FILE__)
 
-#ifdef				_DEBUG
-	constexpr char		LOG_DEBUG_CHAR		= 'D';		// D if debug, R if release
-#else				// !_DEBUG
-	constexpr char		LOG_DEBUG_CHAR		= 'R';		// D if debug, R if release
+#if defined(_DEBUG) || (!defined(NDEBUG) && defined(__GNUC__))
+	#define			LOG_DEBUG_CHAR			"D"		// D if debug, R if release
+#else
+	#define			LOG_DEBUG_CHAR			"R"		// D if debug, R if release
 #endif
 
 

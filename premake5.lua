@@ -108,7 +108,7 @@ workspace "LeadTheHordes"
                 "openal32",
                 --[[ SFML dependencies ]]
                 "winmm",
-                "opengl32"
+                "opengl32",
                 "freetype",
                 "gdi32",
             }

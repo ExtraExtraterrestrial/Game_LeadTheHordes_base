@@ -16,7 +16,7 @@ Log& Log::Get() {
 void Log::startup() {
 
 	strcpy_s(commandBuffer, "mkdir logs");
-	strcat_s(commandBuffer, &DIR_DELIMITER);
+	strcat_s(commandBuffer, DIR_DELIMITER);
 	strcat_s(commandBuffer, _Time::s_programStartTime.getStr());
 	strcat_s(commandBuffer, " ");
 	strcat_s(commandBuffer, NULL_FILE_REDIRECT);
@@ -28,7 +28,7 @@ void Log::startup() {
 	logFile.open(logFilePath);
 
 	std::cout << std::boolalpha << std::left;
-	std::cout << (LOG_DEBUG_CHAR == 'D' ? "\x1B[35m[DEBUG]\033[0m" : "\x1B[35m[RELEASE]\033[0m") << std::endl;
+	std::cout << (LOG_DEBUG_CHAR == "D" ? "\x1B[35m[DEBUG]\033[0m" : "\x1B[35m[RELEASE]\033[0m") << std::endl;
 #ifdef _MSC_FULL_VER
 	std::cout << std::setw(36) << "\x1B[35m[VS STUDIO VERSION]\033[0m" << _MSC_FULL_VER << " (1916: Visual Studio 17)" << std::endl;
 #endif
@@ -40,7 +40,7 @@ void Log::startup() {
 
 	if (logFile.is_open()) {
 		logFile << std::boolalpha << std::left;
-		logFile << (LOG_DEBUG_CHAR == 'D' ? "[DEBUG]" : "[RELEASE]") << std::endl;
+		logFile << (LOG_DEBUG_CHAR == "D" ? "[DEBUG]" : "[RELEASE]") << std::endl;
 #ifdef _MSC_FULL_VER
 		logFile << std::setw(36) << "[VS STUDIO VERSION]" << _MSC_FULL_VER << " (1916: Visual Studio 17)" << std::endl;
 #endif
@@ -77,12 +77,12 @@ Log::Log(int threatLevel, int verboseLevel)
 	std::fill(line, line + 120, '_');
 
 	strcpy_s(logFilePath, "logs");
-	strcat_s(logFilePath, &DIR_DELIMITER);
+	strcat_s(logFilePath, DIR_DELIMITER);
 	strcat_s(logFilePath, _Time::s_programStartTime.getStr());
-	strcat_s(logFilePath, &DIR_DELIMITER);
+	strcat_s(logFilePath, DIR_DELIMITER);
 	strcat_s(logFilePath, _Time::s_programStartTime.getStr());
 	strcat_s(logFilePath, "_");
-	strcat_s(logFilePath, &LOG_DEBUG_CHAR);
+	strcat_s(logFilePath, LOG_DEBUG_CHAR);
 	strcat_s(logFilePath, ".log");
 
 	this->startup();

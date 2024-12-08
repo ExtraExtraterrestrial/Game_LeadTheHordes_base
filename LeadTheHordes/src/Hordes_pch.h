@@ -1,5 +1,5 @@
-#pragma once
-
+#ifndef HORDES_PCH_H
+#define HORDES_PCH_H
 
 #include <iostream>
 #include <ctime>
@@ -110,3 +110,5 @@ constexpr double dPHI		= 1.6180339887498948482045;		// golden ratio
     #define			FORCE_ERR(...)		    Log::Get().error(__FUNCTION__, __LOG_FILENAME__, __LINE__, __VA_ARGS__)		// head, body and args to format body in c-style
     #define			FORCE_ASSERT(cond, ...)	Log::Get().assert_(__FUNCTION__, __LOG_FILENAME__, __LINE__, cond, __VA_ARGS__); if (cond) __debugbreak() // condition, head, body and args to format body in c-style
 #endif //HORDES_DIST
+
+#endif //HORDES_PCH_H
