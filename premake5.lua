@@ -28,7 +28,6 @@ workspace "LeadTheHordes"
 
 
 
-        sfmlLibPrefix = ""
         if os.target() == "windows" then
             if _ACTION == "vs2022" then
                 sfmldir = "SFML/Windows_vs22"
@@ -36,7 +35,6 @@ workspace "LeadTheHordes"
                 sfmldir = "SFML/Windows_vs19"
             elseif _ACTION == "gmake2" then
                 sfmldir = "SFML/Windows_GCC"
-                sfmlLIBprefix = "lib"
             else
                 print("\n==================================================\nProject type not supported!\n==================================================\n")
             end
@@ -44,7 +42,6 @@ workspace "LeadTheHordes"
             
         elseif os.target() == "linux" then
             sfmldir = "SFML/Linux_GCC"
-            sfmlLibPrefix = "lib"
 
         elseif os.target() == "macosx" then
             print("\n==================================================\nMac not supported yet!\n==================================================\n")
@@ -97,23 +94,23 @@ workspace "LeadTheHordes"
             -- postbuildcommands { "{COPYFILE} ../" .. sfmldir .. "/bin/sfml-audio-d-2.dll ../" .. outputdir }
 
             links {
+                --[[ SFML ]]
+                "sfml-graphics-s-d",
+                "sfml-audio-s-d",
+                "sfml-window-s-d",
+                "sfml-system-s-d",
+                --[[ these are for audio ]]
+                "flac",
+                "vorbisenc",
+                "vorbisfile",
+                "vorbis",
+                "ogg",
+                "openal32",
                 --[[ SFML dependencies ]]
                 "winmm",
-                "opengl32",
-                sfmlLibPrefix .. "freetype",
+                "opengl32"
+                "freetype",
                 "gdi32",
-                --[[ these are for audio ]]
-                sfmlLibPrefix .. "openal32",
-                sfmlLibPrefix .. "flac",
-                sfmlLibPrefix .. "vorbisenc",
-                sfmlLibPrefix .. "vorbisfile",
-                sfmlLibPrefix .. "vorbis",
-                sfmlLibPrefix .. "ogg",
-                --[[ SFML ]]
-                sfmlLibPrefix .. "sfml-system-s-d",
-                sfmlLibPrefix .. "sfml-window-s-d",
-                sfmlLibPrefix .. "sfml-graphics-s-d",
-                sfmlLibPrefix .. "sfml-audio-s-d"
             }
 
         filter "configurations:Release"
@@ -128,23 +125,23 @@ workspace "LeadTheHordes"
             -- postbuildcommands { "{COPYFILE} ../" .. sfmldir .. "/bin/sfml-audio-2.dll ../" .. outputdir }
             
             links {
+                --[[ SFML ]]
+                "sfml-graphics-s",
+                "sfml-audio-s",
+                "sfml-window-s",
+                "sfml-system-s",
+                --[[ these are for audio ]]
+                "flac",
+                "vorbisenc",
+                "vorbisfile",
+                "vorbis",
+                "ogg",
+                "openal32",
                 --[[ SFML dependencies ]]
-                "opengl32",
-                sfmlLibPrefix .. "freetype",
                 "winmm",
                 "gdi32",
-                --[[ these are for audio ]]
-                sfmlLibPrefix .. "openal32",
-                sfmlLibPrefix .. "flac",
-                sfmlLibPrefix .. "vorbisenc",
-                sfmlLibPrefix .. "vorbisfile",
-                sfmlLibPrefix .. "vorbis",
-                sfmlLibPrefix .. "ogg",
-                --[[ SFML ]]
-                sfmlLibPrefix .. "sfml-system-s",
-                sfmlLibPrefix .. "sfml-window-s",
-                sfmlLibPrefix .. "sfml-graphics-s",
-                sfmlLibPrefix .. "sfml-audio-s"
+                "freetype",
+                "opengl32"
             }
 
         filter "configurations:Dist"
@@ -161,23 +158,24 @@ workspace "LeadTheHordes"
 
 
             links {
+                --[[ SFML ]]
+                "sfml-graphics-s",
+                "sfml-audio-s",
+                "sfml-window-s",
+                "sfml-system-s",
+                
+                --[[ these are for audio ]]
+                "flac",
+                "vorbisenc",
+                "vorbisfile",
+                "vorbis",
+                "ogg",
+                "openal32",
                 --[[ SFML dependencies ]]
-                "opengl32",
-                sfmlLibPrefix .. "freetype",
                 "winmm",
                 "gdi32",
-                --[[ these are for audio ]]
-                sfmlLibPrefix .. "openal32",
-                sfmlLibPrefix .. "flac",
-                sfmlLibPrefix .. "vorbisenc",
-                sfmlLibPrefix .. "vorbisfile",
-                sfmlLibPrefix .. "vorbis",
-                sfmlLibPrefix .. "ogg",
-                --[[ SFML ]]
-                sfmlLibPrefix .. "sfml-system-s",
-                sfmlLibPrefix .. "sfml-window-s",
-                sfmlLibPrefix .. "sfml-graphics-s",
-                sfmlLibPrefix .. "sfml-audio-s"
+                "freetype",
+                "opengl32"
             }
 
     
