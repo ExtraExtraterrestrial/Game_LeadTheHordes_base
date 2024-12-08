@@ -11,7 +11,7 @@ workspace "LeadTheHordes"
 	
 	project "Eris_Utility"
 		kind "StaticLib"
-		staticruntime "on"
+		staticruntime "off"
 		language "C++"
 		cppdialect "C++17"
 		systemversion "latest"

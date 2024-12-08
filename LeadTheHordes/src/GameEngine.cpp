@@ -29,7 +29,7 @@ inline void GameEngine::initWindow() {
 	window.create(
 		settings.win_videoMode,
 		settings.win_title,
-		sf::Style::Titlebar | sf::Style::Close | (Utils::str2bool(settings.win_ini["fullscreen"]) ? sf::Style::Fullscreen : NULL),
+		sf::Style::Titlebar | sf::Style::Close | (Utils::str2bool(settings.win_ini["fullscreen"]) ? sf::Style::Fullscreen : 0),
 		settings.win_contextSettings
 	);
 

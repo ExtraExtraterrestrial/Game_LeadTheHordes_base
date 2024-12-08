@@ -12,21 +12,23 @@ workspace "LeadTheHordes"
         "Dist"
     }
 
-    group "dependencies"
-        include "Eris_Utility"
-    group ""
-
 
     project "LeadTheHordes"
         location "LeadTheHordes"
-        staticruntime "on"
+        staticruntime "off"
         kind "ConsoleApp"
         language "C++"
         cppdialect "C++17"
         systemversion "latest"
 
+        defines "SFML_STATIC"
 
-        
+        group "dependencies"
+            include "Eris_Utility"
+        group ""
+
+
+        sfmlLibPrefix = ""
         if os.target() == "windows" then
             if _ACTION == "vs2022" then
                 sfmldir = "SFML/Windows_vs22"
@@ -34,6 +36,7 @@ workspace "LeadTheHordes"
                 sfmldir = "SFML/Windows_vs19"
             elseif _ACTION == "gmake2" then
                 sfmldir = "SFML/Windows_GCC"
+                sfmlLIBprefix = "lib"
             else
                 print("Type of project not supported")
             end
@@ -41,6 +44,7 @@ workspace "LeadTheHordes"
             
         elseif os.target() == "linux" then
             sfmldir = "SFML/Linux_GCC"
+            sfmlLibPrefix = "lib"
 
         elseif os.target() == "macosx" then
             print("\n==================================================\nMac not supported yet!\n==================================================\n")
@@ -87,30 +91,30 @@ workspace "LeadTheHordes"
             runtime "Debug"
             symbols "On"
             
-            postbuildcommands { "{COPYFILE} ../" .. sfmldir .. "/bin/openal32.dll ../" .. outputdir }
-            postbuildcommands { "{COPYFILE} ../" .. sfmldir .. "/bin/sfml-system-d-2.dll ../" .. outputdir }
-            postbuildcommands { "{COPYFILE} ../" .. sfmldir .. "/bin/sfml-window-d-2.dll ../" .. outputdir }
-            postbuildcommands { "{COPYFILE} ../" .. sfmldir .. "/bin/sfml-graphics-d-2.dll ../" .. outputdir }
-            postbuildcommands { "{COPYFILE} ../" .. sfmldir .. "/bin/sfml-audio-d-2.dll ../" .. outputdir }
+            -- postbuildcommands { "{COPYFILE} ../" .. sfmldir .. "/bin/openal32.dll ../" .. outputdir }
+            -- postbuildcommands { "{COPYFILE} ../" .. sfmldir .. "/bin/sfml-system-d-2.dll ../" .. outputdir }
+            -- postbuildcommands { "{COPYFILE} ../" .. sfmldir .. "/bin/sfml-window-d-2.dll ../" .. outputdir }
+            -- postbuildcommands { "{COPYFILE} ../" .. sfmldir .. "/bin/sfml-graphics-d-2.dll ../" .. outputdir }
+            -- postbuildcommands { "{COPYFILE} ../" .. sfmldir .. "/bin/sfml-audio-d-2.dll ../" .. outputdir }
 
             links {
                 --[[ SFML dependencies ]]
                 "winmm",
                 "opengl32",
-                "freetype",
+                sfmlLibPrefix .. "freetype",
                 "gdi32",
                 --[[ these are for audio ]]
-                "openal32",
-                "flac",
-                "vorbisenc",
-                "vorbisfile",
-                "vorbis",
-                "ogg",
+                sfmlLibPrefix .. "openal32",
+                sfmlLibPrefix .. "flac",
+                sfmlLibPrefix .. "vorbisenc",
+                sfmlLibPrefix .. "vorbisfile",
+                sfmlLibPrefix .. "vorbis",
+                sfmlLibPrefix .. "ogg",
                 --[[ SFML ]]
-                "sfml-system-d",
-                "sfml-window-d",
-                "sfml-graphics-d",
-                "sfml-audio-d"
+                sfmlLibPrefix .. "sfml-system-s-d",
+                sfmlLibPrefix .. "sfml-window-s-d",
+                sfmlLibPrefix .. "sfml-graphics-s-d",
+                sfmlLibPrefix .. "sfml-audio-s-d"
             }
 
         filter "configurations:Release"
@@ -118,29 +122,30 @@ workspace "LeadTheHordes"
             runtime "Release"
             optimize "On"
 
-            postbuildcommands { "{COPYFILE} ../" .. sfmldir .. "/bin/openal32.dll ../" .. outputdir}
-            postbuildcommands { "{COPYFILE} ../" .. sfmldir .. "/bin/sfml-system-2.dll ../" .. outputdir}
-            postbuildcommands { "{COPYFILE} ../" .. sfmldir .. "/bin/sfml-window-2.dll ../" .. outputdir}
-            postbuildcommands { "{COPYFILE} ../" .. sfmldir .. "/bin/sfml-graphics-2.dll ../" .. outputdir}
-            postbuildcommands { "{COPYFILE} ../" .. sfmldir .. "/bin/sfml-audio-2.dll ../" .. outputdir }
+            -- postbuildcommands { "{COPYFILE} ../" .. sfmldir .. "/bin/openal32.dll ../" .. outputdir}
+            -- postbuildcommands { "{COPYFILE} ../" .. sfmldir .. "/bin/sfml-system-2.dll ../" .. outputdir}
+            -- postbuildcommands { "{COPYFILE} ../" .. sfmldir .. "/bin/sfml-window-2.dll ../" .. outputdir}
+            -- postbuildcommands { "{COPYFILE} ../" .. sfmldir .. "/bin/sfml-graphics-2.dll ../" .. outputdir}
+            -- postbuildcommands { "{COPYFILE} ../" .. sfmldir .. "/bin/sfml-audio-2.dll ../" .. outputdir }
             
             links {
                 --[[ SFML dependencies ]]
                 "opengl32",
-                "freetype",
+                sfmlLibPrefix .. "freetype",
                 "winmm",
                 "gdi32",
                 --[[ these are for audio ]]
-                "flac",
-                "vorbisenc",
-                "vorbisfile",
-                "vorbis",
-                "ogg",
+                sfmlLibPrefix .. "openal32",
+                sfmlLibPrefix .. "flac",
+                sfmlLibPrefix .. "vorbisenc",
+                sfmlLibPrefix .. "vorbisfile",
+                sfmlLibPrefix .. "vorbis",
+                sfmlLibPrefix .. "ogg",
                 --[[ SFML ]]
-                "sfml-system",
-                "sfml-window",
-                "sfml-graphics",
-                "sfml-audio"
+                sfmlLibPrefix .. "sfml-system-s",
+                sfmlLibPrefix .. "sfml-window-s",
+                sfmlLibPrefix .. "sfml-graphics-s",
+                sfmlLibPrefix .. "sfml-audio-s"
             }
 
         filter "configurations:Dist"
@@ -149,30 +154,31 @@ workspace "LeadTheHordes"
             optimize "On"
             
             
-            postbuildcommands { "{COPYFILE} ../" .. sfmldir .. "/bin/openal32.dll ../" .. outputdir}
-            postbuildcommands { "{COPYFILE} ../" .. sfmldir .. "/bin/sfml-system-2.dll ../" .. outputdir}
-            postbuildcommands { "{COPYFILE} ../" .. sfmldir .. "/bin/sfml-window-2.dll ../" .. outputdir}
-            postbuildcommands { "{COPYFILE} ../" .. sfmldir .. "/bin/sfml-graphics-2.dll ../" .. outputdir}
-            postbuildcommands { "{COPYFILE} ../" .. sfmldir .. "/bin/sfml-audio-2.dll ../" .. outputdir }
+            -- postbuildcommands { "{COPYFILE} ../" .. sfmldir .. "/bin/openal32.dll ../" .. outputdir}
+            -- postbuildcommands { "{COPYFILE} ../" .. sfmldir .. "/bin/sfml-system-2.dll ../" .. outputdir}
+            -- postbuildcommands { "{COPYFILE} ../" .. sfmldir .. "/bin/sfml-window-2.dll ../" .. outputdir}
+            -- postbuildcommands { "{COPYFILE} ../" .. sfmldir .. "/bin/sfml-graphics-2.dll ../" .. outputdir}
+            -- postbuildcommands { "{COPYFILE} ../" .. sfmldir .. "/bin/sfml-audio-2.dll ../" .. outputdir }
 
 
             links {
                 --[[ SFML dependencies ]]
                 "opengl32",
-                "freetype",
+                sfmlLibPrefix .. "freetype",
                 "winmm",
                 "gdi32",
                 --[[ these are for audio ]]
-                "flac",
-                "vorbisenc",
-                "vorbisfile",
-                "vorbis",
-                "ogg",
+                sfmlLibPrefix .. "openal32",
+                sfmlLibPrefix .. "flac",
+                sfmlLibPrefix .. "vorbisenc",
+                sfmlLibPrefix .. "vorbisfile",
+                sfmlLibPrefix .. "vorbis",
+                sfmlLibPrefix .. "ogg",
                 --[[ SFML ]]
-                "sfml-system",
-                "sfml-window",
-                "sfml-graphics",
-                "sfml-audio"
+                sfmlLibPrefix .. "sfml-system-s",
+                sfmlLibPrefix .. "sfml-window-s",
+                sfmlLibPrefix .. "sfml-graphics-s",
+                sfmlLibPrefix .. "sfml-audio-s"
             }
 
     
