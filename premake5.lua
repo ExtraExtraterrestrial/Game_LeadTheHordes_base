@@ -12,6 +12,9 @@ workspace "LeadTheHordes"
         "Dist"
     }
 
+    group "dependencies"
+        include "Eris_Utility"
+    group ""
 
     project "LeadTheHordes"
         location "LeadTheHordes"
@@ -23,9 +26,6 @@ workspace "LeadTheHordes"
 
         defines "SFML_STATIC"
 
-        group "dependencies"
-            include "Eris_Utility"
-        group ""
 
 
         sfmlLibPrefix = ""
@@ -38,7 +38,7 @@ workspace "LeadTheHordes"
                 sfmldir = "SFML/Windows_GCC"
                 sfmlLIBprefix = "lib"
             else
-                print("Type of project not supported")
+                print("\n==================================================\nProject type not supported!\n==================================================\n")
             end
 
             
@@ -52,7 +52,6 @@ workspace "LeadTheHordes"
         else
             print("\n==================================================\nSystem not supported!\n==================================================\n")
         end
-
         
         linkoptions { "-IGNORE:4099" }
 
