@@ -1,43 +1,43 @@
-project "Eris_Utility"
-	kind "StaticLib"
-	staticruntime "on"
-	language "C++"
-	cppdialect "C++20"
-	systemversion "latest"
+workspace "LeadTheHordes"
 
-	architecture "x86_64"
+    architecture "x64"
+
+    configurations {
+        "Debug",
+        "Release",
+        "Dist"
+    }
 	
-	configurations {
-		"Debug",
-		"Release",
-		"Dist"
-	}
+	
+	project "Eris_Utility"
+		kind "StaticLib"
+		staticruntime "on"
+		language "C++"
+		cppdialect "C++17"
+		systemversion "latest"
+		
+		targetdir (outputdir)
+		objdir ("obj/" .. outputdirname)
 
-	outputdirname = "%{cfg.system}_%{cfg.buildcfg}-%{cfg.architecture}_" .. _ACTION
-	outputdir = "lib/" .. outputdirname
+		files {
+			"include/%{prj.name}/**.h",
+			"src/**.cpp",
+			"src/**.tpp"
+		}
 
-	targetdir (outputdir)
-	objdir ("obj/" .. outputdirname)
-
-	files {
-		"include/%{prj.name}/**.h",
-		"src/**.cpp",
-		"src/**.tpp"
-	}
-
-	includedirs {
-		"include"
-	}
+		includedirs {
+			"include"
+		}
 
 
-	filter "configurations:Debug"
-		symbols "On"
-		runtime "Debug"
+		filter "configurations:Debug"
+			symbols "On"
+			runtime "Debug"
 
-	filter "configurations:Release"
-		optimize "On"
-		runtime "Release"
+		filter "configurations:Release"
+			optimize "On"
+			runtime "Release"
 
-	filter "configurations:Dist"
-		optimize "On"
-		runtime "Release"
+		filter "configurations:Dist"
+			optimize "On"
+			runtime "Release"

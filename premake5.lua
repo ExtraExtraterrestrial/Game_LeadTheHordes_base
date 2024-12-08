@@ -1,7 +1,7 @@
 workspace "LeadTheHordes"
 
-print(_ACTION) -- finish checking for action and figure out static sfml
-
+    outputdirname = "%{cfg.system}_%{cfg.buildcfg}-%{cfg.architecture}_" .. _ACTION
+    outputdir = "bin/" .. outputdirname
 
     architecture "x64"
     startproject "LeadTheHordes"
@@ -19,14 +19,36 @@ print(_ACTION) -- finish checking for action and figure out static sfml
 
     project "LeadTheHordes"
         location "LeadTheHordes"
-        staticruntime "on" -- this might cause issues later with dynamic sfml
+        staticruntime "on"
         kind "ConsoleApp"
         language "C++"
-        cppdialect "C++20"
+        cppdialect "C++17"
         systemversion "latest"
 
-        outputdirname = "%{cfg.system}_%{cfg.buildcfg}-%{cfg.architecture}_" .. _ACTION
-        outputdir = "bin/" .. outputdirname
+
+        
+        if os.target() == "windows" then
+            if _ACTION == "vs2022" then
+                sfmldir = "SFML/Windows_vs22"
+            elseif _ACTION == "vs2019" then
+                sfmldir = "SFML/Windows_vs19"
+            elseif _ACTION == "gmake2" then
+                sfmldir = "SFML/Windows_GCC"
+            else
+                print("Type of project not supported")
+            end
+
+            
+        elseif os.target() == "linux" then
+            sfmldir = "SFML/Linux_GCC"
+
+        elseif os.target() == "macosx" then
+            print("\n==================================================\nMac not supported yet!\n==================================================\n")
+
+        else
+            print("\n==================================================\nSystem not supported!\n==================================================\n")
+        end
+
         
         linkoptions { "-IGNORE:4099" }
 
@@ -41,7 +63,7 @@ print(_ACTION) -- finish checking for action and figure out static sfml
         
         libdirs {
             "Eris_Utility/lib/" .. outputdirname,
-            "SFML/lib"
+            sfmldir .. "/lib"
         }
         
 
@@ -51,7 +73,7 @@ print(_ACTION) -- finish checking for action and figure out static sfml
 
         includedirs {
             "LeadTheHordes/src",
-            "SFML/include",
+            sfmldir .. "/include",
             "Eris_Utility/include"
         }
 
@@ -65,11 +87,11 @@ print(_ACTION) -- finish checking for action and figure out static sfml
             runtime "Debug"
             symbols "On"
             
-            prebuildcommands { "{COPYFILE} ../SFML/bin/openal32.dll ../" .. outputdir }
-            prebuildcommands { "{COPYFILE} ../SFML/bin/sfml-system-d-2.dll ../" .. outputdir }
-            prebuildcommands { "{COPYFILE} ../SFML/bin/sfml-window-d-2.dll ../" .. outputdir }
-            prebuildcommands { "{COPYFILE} ../SFML/bin/sfml-graphics-d-2.dll ../" .. outputdir }
-            prebuildcommands { "{COPYFILE} ../SFML/bin/sfml-audio-d-2.dll ../" .. outputdir }
+            postbuildcommands { "{COPYFILE} ../" .. sfmldir .. "/bin/openal32.dll ../" .. outputdir }
+            postbuildcommands { "{COPYFILE} ../" .. sfmldir .. "/bin/sfml-system-d-2.dll ../" .. outputdir }
+            postbuildcommands { "{COPYFILE} ../" .. sfmldir .. "/bin/sfml-window-d-2.dll ../" .. outputdir }
+            postbuildcommands { "{COPYFILE} ../" .. sfmldir .. "/bin/sfml-graphics-d-2.dll ../" .. outputdir }
+            postbuildcommands { "{COPYFILE} ../" .. sfmldir .. "/bin/sfml-audio-d-2.dll ../" .. outputdir }
 
             links {
                 --[[ SFML dependencies ]]
@@ -95,13 +117,13 @@ print(_ACTION) -- finish checking for action and figure out static sfml
             defines "HORDES_RELEASE"
             runtime "Release"
             optimize "On"
-            
-            prebuildcommands { "{COPYFILE} ../SFML/bin/openal32.dll ../" .. outputdir}
-            prebuildcommands { "{COPYFILE} ../SFML/bin/sfml-system-2.dll ../" .. outputdir}
-            prebuildcommands { "{COPYFILE} ../SFML/bin/sfml-window-2.dll ../" .. outputdir}
-            prebuildcommands { "{COPYFILE} ../SFML/bin/sfml-graphics-2.dll ../" .. outputdir}
-            prebuildcommands { "{COPYFILE} ../SFML/bin/sfml-audio-2.dll ../" .. outputdir }
 
+            postbuildcommands { "{COPYFILE} ../" .. sfmldir .. "/bin/openal32.dll ../" .. outputdir}
+            postbuildcommands { "{COPYFILE} ../" .. sfmldir .. "/bin/sfml-system-2.dll ../" .. outputdir}
+            postbuildcommands { "{COPYFILE} ../" .. sfmldir .. "/bin/sfml-window-2.dll ../" .. outputdir}
+            postbuildcommands { "{COPYFILE} ../" .. sfmldir .. "/bin/sfml-graphics-2.dll ../" .. outputdir}
+            postbuildcommands { "{COPYFILE} ../" .. sfmldir .. "/bin/sfml-audio-2.dll ../" .. outputdir }
+            
             links {
                 --[[ SFML dependencies ]]
                 "opengl32",
@@ -127,11 +149,12 @@ print(_ACTION) -- finish checking for action and figure out static sfml
             optimize "On"
             
             
-            prebuildcommands { "{COPYFILE} ../SFML/bin/openal32.dll ../" .. outputdir}
-            prebuildcommands { "{COPYFILE} ../SFML/bin/sfml-system-2.dll ../" .. outputdir}
-            prebuildcommands { "{COPYFILE} ../SFML/bin/sfml-window-2.dll ../" .. outputdir}
-            prebuildcommands { "{COPYFILE} ../SFML/bin/sfml-graphics-2.dll ../" .. outputdir}
-            prebuildcommands { "{COPYFILE} ../SFML/bin/sfml-audio-2.dll ../" .. outputdir }
+            postbuildcommands { "{COPYFILE} ../" .. sfmldir .. "/bin/openal32.dll ../" .. outputdir}
+            postbuildcommands { "{COPYFILE} ../" .. sfmldir .. "/bin/sfml-system-2.dll ../" .. outputdir}
+            postbuildcommands { "{COPYFILE} ../" .. sfmldir .. "/bin/sfml-window-2.dll ../" .. outputdir}
+            postbuildcommands { "{COPYFILE} ../" .. sfmldir .. "/bin/sfml-graphics-2.dll ../" .. outputdir}
+            postbuildcommands { "{COPYFILE} ../" .. sfmldir .. "/bin/sfml-audio-2.dll ../" .. outputdir }
+
 
             links {
                 --[[ SFML dependencies ]]
