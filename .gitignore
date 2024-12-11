@@ -412,6 +412,7 @@ FodyWeavers.xsd
 
 
 Eris_Utility/**
+**/makefile
 
 !SFML/**
 !Eris_Utility/include/**
