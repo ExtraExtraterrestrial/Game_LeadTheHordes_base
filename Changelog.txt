@@ -9,7 +9,7 @@ TODO:
 
 [0.0.0.0] setting things up
 - Add multithreading safety to Eris_Utility
-- Logs are broken, it doesn't create appropriate directory for the time of the program start; _Time::s_programStartTime.getStr() might be broken
++ fixed: Logs are broken, it doesn't create appropriate directory for the time of the program start; _Time::s_programStartTime.getStr() might be broken
 + Make sure SFML is compatible between compilers (only for 13.1.0)
 + Change dynamic SFML to static SFML
 + Rework Eris_Utility for increased compatility between different compilers

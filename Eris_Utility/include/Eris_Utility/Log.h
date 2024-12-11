@@ -4,7 +4,12 @@
 #include <iomanip>
 #include <cstring>
 
-#include "_Time.h"
+#include "Time.h"
+
+// #include "../src/Log.tpp" at the bottom
+
+
+namespace EUtil {
 
 #if defined(__linux__) || defined(LINUX)
 	#define				DIR_DELIMITER	 	"/"
@@ -92,6 +97,9 @@ public:
 	template<typename Fu = std::string_view, typename Fi = std::string_view, typename H = std::string_view>
 	void assert_(Fu func_name, Fi file_name, int line, bool condition, H head);
 };
+
+
+}
 
 #include "../src/Log.tpp"
 
