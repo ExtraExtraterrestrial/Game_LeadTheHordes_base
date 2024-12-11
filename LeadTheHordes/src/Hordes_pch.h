@@ -21,7 +21,7 @@
 #include <SFML/Graphics.hpp>
 #include <SFML/Audio.hpp>
 
-#include "Eris_Utility/Time.h"
+#include "Eris_Utility/TimeFormatter.h"
 #include "Eris_Utility/Log.h"
 
 #include "core/dt.h"

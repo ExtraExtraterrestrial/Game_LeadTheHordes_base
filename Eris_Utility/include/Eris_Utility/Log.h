@@ -4,10 +4,10 @@
 #include <iomanip>
 #include <cstring>
 
-#include "Time.h"
+#include "TimeFormatter.h"
 
 // #include "../src/Log.tpp" at the bottom
-
+// #define LOG_DO_NOT_AUTOSTART use this header if you want to change filename
 
 namespace EUtil {
 
@@ -34,6 +34,8 @@ namespace EUtil {
 
 class Log {
 public:
+	static Log& Get();
+
 	Log(const Log&) = delete;
 	~Log();
 private:
@@ -46,20 +48,18 @@ private:
 	}; VerboseLevels verboseLevel;
 
 	char logFilePath[128];
-	char commandBuffer[128];
+	std::string commandBuffer;
 
-#pragma warning(suppress : 4251) // this file will be compiled with the rest of the code so this warning is superfluous
 	std::ofstream logFile;
 
 	short bodyLen;			// specifies how many character per line (after 3 tabs)
 	char line[128];			// remember to change it each time
 
-	void startup();
 	Log(int threatLevel = 2, int verboseLevel = 2);
 	static Log instance;
 
 public:
-	static Log& Get();
+	void startup(std::string_view filePrefix = "EUtil__");
 
 	inline void setLevel(int threatLevel, int verboseLevel) {
 		this->showThreatLevel = (ThreatLevels)threatLevel;
@@ -118,10 +118,10 @@ public:
 #define			T_DATETIMET_CHG_FORMAT(f)		_Time::s_datetime.changeFormat(f)		// changes format of datetime
 
 // ErisUtility Log
-#define			LOG_SETLEVEL(threat, verb)	Log::Get().setLevel(threat, verb)
-#define			LOG_INFO(...)				Log::Get().info(__FUNCTION__, __LOG_FILENAME__, __LINE__, __VA_ARGS__)		// head, body and args to format body in c-style
-#define			LOG_WARN(...)				Log::Get().warn(__FUNCTION__, __LOG_FILENAME__, __LINE__, __VA_ARGS__)		// head, body and args to format body in c-style
-#define			LOG_SUCC(...)				Log::Get().success(__FUNCTION__, __LOG_FILENAME__, __LINE__, __VA_ARGS__)	// head, body and args to format body in c-style
-#define			LOG_ERR(...)				Log::Get().error(__FUNCTION__, __LOG_FILENAME__, __LINE__, __VA_ARGS__)		// head, body and args to format body in c-style
+#define			LOG_SETLEVEL(threat, verb)		Log::Get().setLevel(threat, verb)
+#define			LOG_INFO(...)					Log::Get().info(__FUNCTION__, __LOG_FILENAME__, __LINE__, __VA_ARGS__)		// head, body and args to format body in c-style
+#define			LOG_WARN(...)					Log::Get().warn(__FUNCTION__, __LOG_FILENAME__, __LINE__, __VA_ARGS__)		// head, body and args to format body in c-style
+#define			LOG_SUCC(...)					Log::Get().success(__FUNCTION__, __LOG_FILENAME__, __LINE__, __VA_ARGS__)	// head, body and args to format body in c-style
+#define			LOG_ERR(...)					Log::Get().error(__FUNCTION__, __LOG_FILENAME__, __LINE__, __VA_ARGS__)		// head, body and args to format body in c-style
 
 #endif //ERIS_UTILITY_PREMADE_MACROS

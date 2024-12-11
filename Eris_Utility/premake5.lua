@@ -19,6 +19,9 @@ workspace "LeadTheHordes"
 		targetdir (outputdir)
 		objdir ("obj/" .. outputdirname)
 
+
+		defines { "LOG_DO_NOT_AUTOSTART" }
+		
 		files {
 			"include/%{prj.name}/**.h",
 			"src/**.cpp",
