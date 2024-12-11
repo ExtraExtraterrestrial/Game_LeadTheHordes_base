@@ -8,8 +8,11 @@ TODO:
 
 
 [0.0.0.0] setting things up
+- ponder upon CMake
 - Add multithreading safety to Eris_Utility
-- Change dynamic SFML to static SFML
++ fixed: Logs are broken, it doesn't create appropriate directory for the time of the program start; _Time::s_programStartTime.getStr() might be broken
++ Make sure SFML is compatible between compilers (only for GCC 13.1.0 right now)
++ Change dynamic SFML to static SFML
 + Rework Eris_Utility for increased compatility between different compilers
 + Add Eris_Utility
 + Premake is ready
