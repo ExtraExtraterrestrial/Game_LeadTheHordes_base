@@ -4,8 +4,8 @@
 
 namespace EUtil {
 
-template<typename Fu, typename Fi, typename H, typename B>
-void Log::info(Fu func_name, Fi file_name, int codeline, H head, B body, ...) {
+template<typename Func, typename File, typename H, typename B>
+void Log::info(Func func_name, File file_name, int codeline, H head, B body, ...) {
 	char buf[256];
 
 	if constexpr (std::is_same_v<B, const char*>) {
@@ -60,8 +60,8 @@ void Log::info(Fu func_name, Fi file_name, int codeline, H head, B body, ...) {
 	}
 }
 
-template<typename Fu, typename Fi, typename H>
-void Log::info(Fu func_name, Fi file_name, int codeline, H head) {
+template<typename Func, typename File, typename H>
+void Log::info(Func func_name, File file_name, int codeline, H head) {
 	if (showThreatLevel == InfoLvl) {
 		if (verboseLevel >= LowVerbose) {
 			std::cout << std::left 
@@ -86,8 +86,8 @@ void Log::info(Fu func_name, Fi file_name, int codeline, H head) {
 
 
 
-template<typename Fu, typename Fi, typename H, typename B>
-void Log::success(Fu func_name, Fi file_name, int codeline, H head, B body, ...) {
+template<typename Func, typename File, typename H, typename B>
+void Log::success(Func func_name, File file_name, int codeline, H head, B body, ...) {
 	char buf[256];
 
 	if constexpr (std::is_same_v<B, const char*>) {
@@ -141,8 +141,8 @@ void Log::success(Fu func_name, Fi file_name, int codeline, H head, B body, ...)
 	}
 }
 
-template<typename Fu, typename Fi, typename H>
-void Log::success(Fu func_name, Fi file_name, int codeline, H head) {
+template<typename Func, typename File, typename H>
+void Log::success(Func func_name, File file_name, int codeline, H head) {
 	if (showThreatLevel == InfoLvl) {
 		if (verboseLevel >= LowVerbose) {
 			std::cout << std::left 
@@ -166,8 +166,8 @@ void Log::success(Fu func_name, Fi file_name, int codeline, H head) {
 
 
 
-template<typename Fu, typename Fi, typename H, typename B>
-void Log::warn(Fu func_name, Fi file_name, int codeline, H head, B body, ...) {
+template<typename Func, typename File, typename H, typename B>
+void Log::warn(Func func_name, File file_name, int codeline, H head, B body, ...) {
 	char buf[256];
 
 	if constexpr (std::is_same_v<B, const char*>) {
@@ -222,8 +222,8 @@ void Log::warn(Fu func_name, Fi file_name, int codeline, H head, B body, ...) {
 	}
 }
 
-template<typename Fu, typename Fi, typename H>
-void Log::warn(Fu func_name, Fi file_name, int codeline, H head) {
+template<typename Func, typename File, typename H>
+void Log::warn(Func func_name, File file_name, int codeline, H head) {
 	if (showThreatLevel >= WarningLvl) {
 		if (verboseLevel >= LowVerbose) {
 			std::cout << std::left 
@@ -248,8 +248,8 @@ void Log::warn(Fu func_name, Fi file_name, int codeline, H head) {
 
 
 
-template<typename Fu, typename Fi, typename H, typename B>
-void Log::error(Fu func_name, Fi file_name, int codeline, H head, B body, ...) {
+template<typename Func, typename File, typename H, typename B>
+void Log::error(Func func_name, File file_name, int codeline, H head, B body, ...) {
 	char buf[256];
 
 	if constexpr (std::is_same_v<B, const char*>) {
@@ -301,8 +301,8 @@ void Log::error(Fu func_name, Fi file_name, int codeline, H head, B body, ...) {
 	logFile.flush();
 }
 
-template<typename Fu, typename Fi, typename H>
-void Log::error(Fu func_name, Fi file_name, int codeline, H head) {
+template<typename Func, typename File, typename H>
+void Log::error(Func func_name, File file_name, int codeline, H head) {
 	char buf[256];
 
 	if (verboseLevel >= LowVerbose) {
@@ -326,8 +326,8 @@ void Log::error(Fu func_name, Fi file_name, int codeline, H head) {
 
 
 
-template<typename Fu, typename Fi, typename H, typename B>
-void Log::assert_(Fu func_name, Fi file_name, int codeline, bool condition, H head, B body, ...) {
+template<typename Func, typename File, typename H, typename B>
+void Log::assert_(Func func_name, File file_name, int codeline, bool condition, H head, B body, ...) {
 	if (condition) {
 		char buf[256];
 
@@ -381,8 +381,8 @@ void Log::assert_(Fu func_name, Fi file_name, int codeline, bool condition, H he
 	}
 }
 
-template<typename Fu, typename Fi, typename H>
-void Log::assert_(Fu func_name, Fi file_name, int codeline, bool condition, H head) {
+template<typename Func, typename File, typename H>
+void Log::assert_(Func func_name, File file_name, int codeline, bool condition, H head) {
 	if (condition) {
 		if (verboseLevel >= LowVerbose) {
 			std::cout << std::left 

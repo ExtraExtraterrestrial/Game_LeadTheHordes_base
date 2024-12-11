@@ -34,7 +34,7 @@ Log::Log(int threatLevel, int verboseLevel)
 	commandBuffer  = "mkdir logs";
 	commandBuffer += DIR_DELIMITER;
 	commandBuffer += TimeFormatter::s_programStart.getStr();
-	commandBuffer += "_";
+	commandBuffer += "-";
 	commandBuffer += LOG_DEBUG_CHAR;
 	commandBuffer += " ";
 	commandBuffer += NULL_FILE_REDIRECT;
@@ -56,16 +56,15 @@ Log::~Log() {
 
 void Log::startup(std::string_view filePrefix) {
 
-
 	std::string filePath = "logs";
 	filePath += DIR_DELIMITER;
 	filePath += TimeFormatter::s_programStart.getStr();
-	filePath += "_";
+	filePath += "-";
 	filePath += LOG_DEBUG_CHAR;
 	filePath += DIR_DELIMITER;
 	filePath += filePrefix;
 	filePath += TimeFormatter::s_programStart.getStr();
-	filePath += "_";
+	filePath += "-";
 	filePath += LOG_DEBUG_CHAR;
 	filePath += ".log";
 
@@ -74,12 +73,12 @@ void Log::startup(std::string_view filePrefix) {
 	//strcpy_s(logFilePath, "logs");
 	//strcat_s(logFilePath, DIR_DELIMITER);
 	//strncat_s(logFilePath, TimeFormatter::s_programStart.getStr(), std::strlen(TimeFormatter::s_programStart.getStr()));
-	//strcat_s(logFilePath, "_");
+	//strcat_s(logFilePath, "-");
 	//strcat_s(logFilePath, LOG_DEBUG_CHAR);
 	//strcat_s(logFilePath, DIR_DELIMITER);
 	//strcat_s(logFilePath, "EUtil__");
 	//strncat_s(logFilePath, TimeFormatter::s_programStart.getStr(), std::strlen(TimeFormatter::s_programStart.getStr()));
-	//strcat_s(logFilePath, "_");
+	//strcat_s(logFilePath, "-");
 	//strcat_s(logFilePath, LOG_DEBUG_CHAR);
 	//strcat_s(logFilePath, ".log");
 
@@ -89,14 +88,18 @@ void Log::startup(std::string_view filePrefix) {
 	std::cout << (LOG_DEBUG_CHAR == "D" ? "\x1B[35m[DEBUG]\033[0m" : "\x1B[35m[RELEASE]\033[0m") << std::endl;
 	
 	#ifdef _MSC_FULL_VER
-		std::cout << std::setw(36) << "\x1B[35m[VS STUDIO VERSION]\033[0m" << _MSC_FULL_VER << " (1916: Visual Studio 17)" << std::endl;
-	#endif
-	
-	#ifdef _MSVC_LANG
-		std::cout << std::setw(36) << "\x1B[35m[C++ VERSION]\033[0m" << _MSVC_LANG << std::endl;
+		std::cout << std::setw(36) << "\x1B[35m[VS STUDIO VERSION]\033[0m" << _MSC_FULL_VER << std::endl;
+		std::cout << std::setw(36) << "\x1B[35m[C++ VERSION]\033[0m" << _MSVC_LANG << std::endl << std::endl;
 	#endif
 
-	std::cout << std::setw(36) << "\x1B[35m[START DATETIME]\033[0m" << TimeFormatter::s_datetime.getNowStr() << std::endl;
+
+	#ifdef __GNUG__
+			std::cout << std::setw(36) << "\x1B[35m[GCC VERSION]\033[0m" << __GNUC__ << "." << __GNUC_MINOR__ << "." << __GNUC_PATCHLEVEL__ << std::endl;
+			std::cout << std::setw(36) << "\x1B[35m[C++ VERSION]\033[0m" << __cplusplus << std::endl << std::endl;
+	#endif
+
+
+	std::cout << std::setw(36) << "\x1B[35m[START TIME]\033[0m" << TimeFormatter::s_datetime.getNowStr() << std::endl;
 	std::cout << "\x1B[35m" << line << "\033[0m\n" << std::endl;
 
 	if (logFile.is_open()) {
@@ -104,15 +107,18 @@ void Log::startup(std::string_view filePrefix) {
 		logFile << (LOG_DEBUG_CHAR == "D" ? "[DEBUG]" : "[RELEASE]") << std::endl;
 	
 		#ifdef _MSC_FULL_VER
-				logFile << std::setw(36) << "[VS STUDIO VERSION]" << _MSC_FULL_VER << " (1916: Visual Studio 17)" << std::endl;
-		#endif
-		
-		#ifdef _MSVC_LANG
-				logFile << std::setw(36) << "[C++ VERSION]" << _MSVC_LANG << std::endl;
+				logFile << std::setw(36) << "[VS STUDIO VERSION]" << _MSC_FULL_VER << std::endl;
+				logFile << std::setw(36) << "[C++ VERSION]" << _MSVC_LANG << std::endl << std::endl;
 		#endif
 
-		logFile << std::setw(36) << "[START DATETIME]" << TimeFormatter::s_datetime.getNowStr() << std::endl;
+		#ifdef __GNUG__
+				logFile << std::setw(36) << "\x1B[35m[GCC VERSION]\033[0m" << __GNUC__ << "." << __GNUC_MINOR__ << "." << __GNUC_PATCHLEVEL__ << std::endl;
+				logFile << std::setw(36) << "\x1B[35m[C++ VERSION]\033[0m" << __cplusplus << std::endl << std::endl;
+		#endif
+
+		logFile << std::setw(36) << "[START TIME]" << TimeFormatter::s_datetime.getNowStr() << std::endl;
 		logFile << line << std::endl;
+
 	} else {
 
 		std::cout << std::left 

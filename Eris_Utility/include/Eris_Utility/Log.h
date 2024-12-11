@@ -69,33 +69,33 @@ public:
 	inline void setVerboseLevel(int verbLevel) { this->showThreatLevel = (ThreatLevels)verbLevel; }
 
 	// definitions in Log.tpp since they're templates
-	template<typename Fu = std::string_view, typename Fi = std::string_view, typename H = std::string_view, typename B = std::string_view>
-	void info(Fu func_name, Fi file_name, int line, H head, B body, ...);
-	template<typename Fu = std::string_view, typename Fi = std::string_view, typename H = std::string_view>
-	void info(Fu func_name, Fi file_name, int line, H head);
+	template<typename Func = std::string_view, typename File = std::string_view, typename H = std::string_view, typename B = std::string_view>
+	void info(Func func_name, File file_name, int line, H head, B body, ...);
+	template<typename Func = std::string_view, typename File = std::string_view, typename H = std::string_view>
+	void info(Func func_name, File file_name, int line, H head);
 
 
-	template<typename Fu = std::string_view, typename Fi = std::string_view, typename H = std::string_view, typename B = std::string_view>
-	void success(Fu func_name, Fi file_name, int line, H head, B body, ...);
-	template<typename Fu = std::string_view, typename Fi = std::string_view, typename H = std::string_view>
-	void success(Fu func_name, Fi file_name, int line, H head);
+	template<typename Func = std::string_view, typename File = std::string_view, typename H = std::string_view, typename B = std::string_view>
+	void success(Func func_name, File file_name, int line, H head, B body, ...);
+	template<typename Func = std::string_view, typename File = std::string_view, typename H = std::string_view>
+	void success(Func func_name, File file_name, int line, H head);
 
 
-	template<typename Fu = std::string_view, typename Fi = std::string_view, typename H = std::string_view, typename B = std::string_view>
-	void warn(Fu func_name, Fi file_name, int line, H head, B body, ...);
-	template<typename Fu = std::string_view, typename Fi = std::string_view, typename H = std::string_view>
-	void warn(Fu func_name, Fi file_name, int line, H head);
+	template<typename Func = std::string_view, typename File = std::string_view, typename H = std::string_view, typename B = std::string_view>
+	void warn(Func func_name, File file_name, int line, H head, B body, ...);
+	template<typename Func = std::string_view, typename File = std::string_view, typename H = std::string_view>
+	void warn(Func func_name, File file_name, int line, H head);
 
 
-	template<typename Fu = std::string_view, typename Fi = std::string_view, typename H = std::string_view, typename B = std::string_view>
-	void error(Fu func_name, Fi file_name, int line, H head, B body, ...);
-	template<typename Fu = std::string_view, typename Fi = std::string_view, typename H = std::string_view>
-	void error(Fu func_name, Fi file_name, int line, H head);
+	template<typename Func = std::string_view, typename File = std::string_view, typename H = std::string_view, typename B = std::string_view>
+	void error(Func func_name, File file_name, int line, H head, B body, ...);
+	template<typename Func = std::string_view, typename File = std::string_view, typename H = std::string_view>
+	void error(Func func_name, File file_name, int line, H head);
 
-	template<typename Fu = std::string_view, typename Fi = std::string_view, typename H = std::string_view, typename B = std::string_view>
-	void assert_(Fu func_name, Fi file_name, int line, bool condition, H head, B body, ...);
-	template<typename Fu = std::string_view, typename Fi = std::string_view, typename H = std::string_view>
-	void assert_(Fu func_name, Fi file_name, int line, bool condition, H head);
+	template<typename Func = std::string_view, typename File = std::string_view, typename H = std::string_view, typename B = std::string_view>
+	void assert_(Func func_name, File file_name, int line, bool condition, H head, B body, ...);
+	template<typename Func = std::string_view, typename File = std::string_view, typename H = std::string_view>
+	void assert_(Func func_name, File file_name, int line, bool condition, H head);
 };
 
 

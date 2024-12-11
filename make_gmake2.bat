@@ -1,3 +1,3 @@
-CALL ./make_clean
+rem CALL ./make_clean
 
 premake\premake5.exe gmake2
