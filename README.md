@@ -1,3 +1,6 @@
+# CURRENTLY NOT WORKING - will add the missing files in the next commit
+
+
 # Game_LeadTheHordes_base
 This is the repo in which I'll develop the minimal viable product version of a game I'm making.
 
