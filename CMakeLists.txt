@@ -1,4 +1,16 @@
-cmake_minimum_required(VERSION 3.16)
+cmake_minimum_required(VERSION 3.28)
+include(FetchContent)
+
+### PACKAGES TO PREINSTALL ON LINUX ###
+# libxrandr-dev \
+#     libxcursor-dev \
+#     libudev-dev \
+#     libfreetype-dev \
+#     libopenal-dev \
+#     libflac-dev \
+#     libvorbis-dev \
+#     libgl1-mesa-dev \
+#     libegl1-mesa-dev
 
 project(LeadTheHordes)
 
@@ -6,27 +18,17 @@ project(LeadTheHordes)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
+set(SFML_VERSION "2.6.x")
+
+option(BUILD_SHARED_LIBS "Build shared libraries" OFF)
+set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
+
+add_executable(LeadTheHordes)
+
+add_compile_definitions(SFML_STATIC)
+target_compile_options(LeadTheHordes PRIVATE -Wall)
 
 
-### PACKAGES TO PREINSTALL ###
-# freetype
-# x11
-# xrandr
-# udev
-# opengl
-# flac
-# ogg
-# vorbis
-# vorbisenc
-# vorbisfile
-# openal
-# pthread
-
-
-
-# set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
-
-# #!# Clang untested
 # if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU" OR CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
 #     target_link_options(MyTarget PRIVATE
 #         $<$<CONFIG:Debug>:-static-libgcc -static-libstdc++>
@@ -40,41 +42,38 @@ set(OUTPUT_DIR_NAME ${CMAKE_SYSTEM_NAME}_${CMAKE_GENERATOR}_${CMAKE_BUILD_TYPE}-
 set(PROJECT_BINARY_DIR ${CMAKE_CURRENT_LIST_DIR}/bin/${OUTPUT_DIR_NAME})
 # set(OBJECT_DIR ${CMAKE_CURRENT_LIST_DIR}/obj/${OUTPUT_DIR_NAME})
 
-
-# Define SFML_DIR based on platform
-if(WIN32)
-    if(CMAKE_GENERATOR MATCHES "Visual Studio 16")
-        set(SFML_DIR ${CMAKE_CURRENT_LIST_DIR}/SFML/Windows_vs19)
-    elseif(CMAKE_GENERATOR MATCHES "Visual Studio 17")
-        set(SFML_DIR ${CMAKE_CURRENT_LIST_DIR}/SFML/Windows_vs22)
-    elseif(CMAKE_GENERATOR MATCHES "MinGW" OR CMAKE_GENERATOR MATCHES "Clang")
-        set(SFML_DIR ${CMAKE_CURRENT_LIST_DIR}/SFML/Windows_GCC)
-    endif()
-elseif(UNIX AND NOT APPLE)
-    set(SFML_DIR ${CMAKE_CURRENT_LIST_DIR}/SFML/Linux_GCC)
-else()
-    message(FATAL_ERROR "Mac not supported yet!")
-endif()
-
-
 # SOURCES - all the source files of LeadTheHordes
 file(GLOB_RECURSE SOURCES CONFIGURE_DEPENDS
-    ${CMAKE_CURRENT_LIST_DIR}/LeadTheHordes/src/*.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/LeadTheHordes/src/*.tpp
-    ${CMAKE_CURRENT_LIST_DIR}/LeadTheHordes/src/*.hpp
-    ${CMAKE_CURRENT_LIST_DIR}/LeadTheHordes/src/*.h
+    ${CMAKE_SOURCE_DIR}/LeadTheHordes/src/*.cpp
+    ${CMAKE_SOURCE_DIR}/LeadTheHordes/src/*.tpp
+    ${CMAKE_SOURCE_DIR}/LeadTheHordes/src/*.hpp
+    ${CMAKE_SOURCE_DIR}/LeadTheHordes/src/*.h
 )
 
 
+FetchContent_Declare(sfml
+    GIT_REPOSITORY https://github.com/SFML/SFML.git
+    GIT_TAG 2.6.x
+    GIT_SHALLOW ON
+    EXCLUDE_FROM_ALL
+    SYSTEM
+    SOURCE_DIR ${CMAKE_SOURCE_DIR}/SFML
+    PREFIX ${CMAKE_SOURCE_DIR}/SFML
+)
+
+FetchContent_MakeAvailable(sfml)
+
+
+if(NOT sfml_POPULATED)
+    FetchContent_Populate(sfml)
+    add_subdirectory(${sfml_SOURCE_DIR} ${sfml_BINARY_DIR})
+endif()
+
 # Include dependencies
 add_subdirectory(Eris_Log)
-# add_subdirectory(SFML)
 
-file(COPY ${CMAKE_CURRENT_LIST_DIR}/LeadTheHordes/config DESTINATION ${PROJECT_BINARY_DIR})
+file(COPY ${CMAKE_SOURCE_DIR}/LeadTheHordes/config DESTINATION ${PROJECT_BINARY_DIR})
     
-add_executable(LeadTheHordes)
-
-add_compile_definitions(SFML_STATIC)
 
 # set definition HORDES_DEBUG or HORDES_RELEASE
 target_compile_definitions (LeadTheHordes
@@ -86,26 +85,22 @@ target_compile_definitions (LeadTheHordes
 # )
 
 # Target source files
-target_sources(LeadTheHordes PRIVATE
-    ${SOURCES}
-)
+target_sources(LeadTheHordes PRIVATE ${SOURCES})
 
 # Precompiled headers
-target_precompile_headers(LeadTheHordes PRIVATE ${CMAKE_CURRENT_LIST_DIR}/LeadTheHordes/src/Hordes_pch.h)
+target_precompile_headers(LeadTheHordes PRIVATE ${CMAKE_SOURCE_DIR}/LeadTheHordes/src/Hordes_pch.h)
 
 # Include directories
 target_include_directories(LeadTheHordes PRIVATE
-    ${CMAKE_CURRENT_LIST_DIR}/LeadTheHordes/src
-    ${CMAKE_CURRENT_LIST_DIR}/Eris_Log/include
-    # ${CMAKE_CURRENT_LIST_DIR}/SFML/include
-    ${SFML_DIR}/include
+    ${CMAKE_SOURCE_DIR}/LeadTheHordes/src
+    ${CMAKE_SOURCE_DIR}/Eris_Log/include
+    ${CMAKE_SOURCE_DIR}/SFML/include
 )
 
 # Libraries
 target_link_directories(LeadTheHordes PRIVATE
-    ${CMAKE_CURRENT_LIST_DIR}/Eris_Log/lib/${OUTPUT_DIR_NAME}
-    # ${CMAKE_CURRENT_LIST_DIR}/SFML/lib
-    ${SFML_DIR}/lib
+    ${CMAKE_SOURCE_DIR}/Eris_Log/lib/${OUTPUT_DIR_NAME}
+    ${CMAKE_SOURCE_DIR}/SFML/lib
 )
 
 # Link dependencies
@@ -128,4 +123,3 @@ target_link_libraries(LeadTheHordes PRIVATE
     freetype
     gdi32
 )
-

@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.16)
 
-project(Eris_Log)
+project(Eris_Log LANGUAGES CXX)
 
 # configs
 set(CMAKE_CXX_STANDARD 17)
@@ -8,8 +8,9 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
 set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
+option(BUILD_SHARED_LIBS "Build shared libraries" OFF)
 
-set(CMAKE_CONFIGURATION_TYPES Debug;Release CACHE STRING build_configurations)
+set(CMAKE_CONFIGURATION_TYPES Debug;Release CACHE STRING build_configurations)  
 
 set(OUTPUT_DIR_NAME ${CMAKE_SYSTEM_NAME}_${CMAKE_GENERATOR}_${CMAKE_BUILD_TYPE}-${CMAKE_SYSTEM_PROCESSOR})
 set(PROJECT_BINARY_DIR ${CMAKE_CURRENT_LIST_DIR}/lib/${OUTPUT_DIR_NAME})
