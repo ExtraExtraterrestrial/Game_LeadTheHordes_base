@@ -1,6 +1,7 @@
-./*/**
+**
 
 !**/CMakeLists.txt
+!./*
 
 !LeadTheHordes/src/**
 !LeadTheHordes/logs/**
