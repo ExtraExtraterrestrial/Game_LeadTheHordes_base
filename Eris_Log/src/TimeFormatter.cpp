@@ -11,7 +11,7 @@ TimeFormatter TimeFormatter::s_datetime =			TimeFormatter();
 TimeFormatter TimeFormatter::s_date =				TimeFormatter("%d %b %Y");
 TimeFormatter TimeFormatter::s_time =				TimeFormatter("%H:%M:%S");
 TimeFormatter TimeFormatter::s_file =				TimeFormatter("%Y-%m-%d_%H-%M-%S");
-TimeFormatter TimeFormatter::s_programStart =	TimeFormatter("%Y-%m-%d_%H-%M-%S");
+TimeFormatter TimeFormatter::s_programStart =		TimeFormatter("%Y-%m-%d_%H-%M-%S");
 
 
 TimeFormatter::TimeFormatter(const char format_[]) {

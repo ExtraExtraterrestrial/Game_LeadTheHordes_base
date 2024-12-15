@@ -68,7 +68,7 @@ private: // structs
 
 			win_videoMode = sf::VideoMode::getDesktopMode();
 		}
-	} settings { "configs/window_settings.ini", "configs/keys.ini", 60, "Lead The Hordes!" };
+	} settings { "config/window_settings.ini", "config/keys.ini", 60, "Lead The Hordes!" };
 };
 
 
