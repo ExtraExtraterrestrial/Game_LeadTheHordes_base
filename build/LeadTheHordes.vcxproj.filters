@@ -1,0 +1,63 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="17.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="C:\Dev\_GameDev\Projects\Game_LeadTheHordes_base\build\CMakeFiles\LeadTheHordes.dir\cmake_pch.cxx">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Dev\_GameDev\Projects\Game_LeadTheHordes_base\LeadTheHordes\src\GameEngine.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Dev\_GameDev\Projects\Game_LeadTheHordes_base\LeadTheHordes\src\Hordes_pch.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Dev\_GameDev\Projects\Game_LeadTheHordes_base\LeadTheHordes\src\core\dt.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Dev\_GameDev\Projects\Game_LeadTheHordes_base\LeadTheHordes\src\main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Dev\_GameDev\Projects\Game_LeadTheHordes_base\LeadTheHordes\src\misc\Utils.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="C:\Dev\_GameDev\Projects\Game_LeadTheHordes_base\LeadTheHordes\src\GameEngine.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Dev\_GameDev\Projects\Game_LeadTheHordes_base\LeadTheHordes\src\Hordes_pch.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Dev\_GameDev\Projects\Game_LeadTheHordes_base\LeadTheHordes\src\core\dt.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Dev\_GameDev\Projects\Game_LeadTheHordes_base\LeadTheHordes\src\misc\Utils.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Dev\_GameDev\Projects\Game_LeadTheHordes_base\build\CMakeFiles\LeadTheHordes.dir\Debug\cmake_pch.hxx">
+      <Filter>Precompile Header File</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Dev\_GameDev\Projects\Game_LeadTheHordes_base\build\CMakeFiles\LeadTheHordes.dir\Release\cmake_pch.hxx">
+      <Filter>Precompile Header File</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Dev\_GameDev\Projects\Game_LeadTheHordes_base\build\CMakeFiles\LeadTheHordes.dir\MinSizeRel\cmake_pch.hxx">
+      <Filter>Precompile Header File</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Dev\_GameDev\Projects\Game_LeadTheHordes_base\build\CMakeFiles\LeadTheHordes.dir\RelWithDebInfo\cmake_pch.hxx">
+      <Filter>Precompile Header File</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="C:\Dev\_GameDev\Projects\Game_LeadTheHordes_base\CMakeLists.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{EF4246EC-2212-31F2-AFF0-8232DDFE9D16}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Precompile Header File">
+      <UniqueIdentifier>{A266A110-2DD8-38CE-8BDA-1497144842B3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{EDA893FF-5254-3EDA-ADEF-53661D8C4CC2}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

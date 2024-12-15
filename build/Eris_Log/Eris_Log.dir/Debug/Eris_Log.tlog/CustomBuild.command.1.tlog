@@ -1,0 +1,10 @@
+^C:\DEV\_GAMEDEV\PROJECTS\GAME_LEADTHEHORDES_BASE\ERIS_LOG\CMAKELISTS.TXT
+setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -SC:/Dev/_GameDev/Projects/Game_LeadTheHordes_base -BC:/Dev/_GameDev/Projects/Game_LeadTheHordes_base/build --check-stamp-file C:/Dev/_GameDev/Projects/Game_LeadTheHordes_base/build/Eris_Log/CMakeFiles/generate.stamp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
