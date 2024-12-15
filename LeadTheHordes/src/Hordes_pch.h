@@ -21,8 +21,8 @@
 #include <SFML/Graphics.hpp>
 #include <SFML/Audio.hpp>
 
-#include "Eris_Utility/TimeFormatter.h"
-#include "Eris_Utility/Log.h"
+#include "Eris_Log/TimeFormatter.h"
+#include "Eris_Log/Log.h"
 
 #include "core/dt.h"
 #include "misc/Utils.h"
@@ -66,49 +66,49 @@ constexpr double dPHI		= 1.6180339887498948482045;		// golden ratio
 
 
 // ErisUtility Time
-#define			T_PROGRAM_START_TIME			EUtil::Time::s_programStartTime.getStr()		// returns string&, safe for file naming
-#define			T_FILE_STR						EUtil::Time::s_file.getNowStr()				// returns string&, safe for file naming
-#define			T_DATE_STR						EUtil::Time::s_date.getNowStr()				// returns string& with current date
-#define			T_DATE_CHG_FORMAT(f)			EUtil::Time::s_date.changeFormat(f)			// changes date format
-#define			T_TIME_STR						EUtil::Time::s_time.getNowStr()				// returns string& with current time
-#define			T_TIME_CHG_FORMAT(f)			EUtil::Time::s_time.changeFormat(f)			// changes format of time
-#define			T_DATETIME_STR					EUtil::Time::s_datetime.getNowStr()			// returns string& with current datetime
-#define			T_DATETIMET_CHG_FORMAT(f)		EUtil::Time::s_datetime.changeFormat(f)		// changes format of datetime
+#define			T_PROGRAM_START_TIME			ELog::Time::s_programStartTime.getStr()		// returns string&, safe for file naming
+#define			T_FILE_STR						ELog::Time::s_file.getNowStr()				// returns string&, safe for file naming
+#define			T_DATE_STR						ELog::Time::s_date.getNowStr()				// returns string& with current date
+#define			T_DATE_CHG_FORMAT(f)			ELog::Time::s_date.changeFormat(f)			// changes date format
+#define			T_TIME_STR						ELog::Time::s_time.getNowStr()				// returns string& with current time
+#define			T_TIME_CHG_FORMAT(f)			ELog::Time::s_time.changeFormat(f)			// changes format of time
+#define			T_DATETIME_STR					ELog::Time::s_datetime.getNowStr()			// returns string& with current datetime
+#define			T_DATETIMET_CHG_FORMAT(f)		ELog::Time::s_datetime.changeFormat(f)		// changes format of datetime
 
 
 
 // ErisUtility Log
 #if defined(HORDES_DEBUG)
-    #define			LOG_INFO(...)		    EUtil::Log::Get().info(__FUNCTION__, __LOG_FILENAME__, __LINE__, __VA_ARGS__)		// head, body and args to format body in c-style
-    #define			LOG_WARN(...)		    EUtil::Log::Get().warn(__FUNCTION__, __LOG_FILENAME__, __LINE__, __VA_ARGS__)		// head, body and args to format body in c-style
-    #define			LOG_SUCC(...)		    EUtil::Log::Get().success(__FUNCTION__, __LOG_FILENAME__, __LINE__, __VA_ARGS__)	// head, body and args to format body in c-style
-    #define			LOG_ERR(...)		    EUtil::Log::Get().error(__FUNCTION__, __LOG_FILENAME__, __LINE__, __VA_ARGS__)		// head, body and args to format body in c-style
-    #define			LOG_ASSERT(cond, ...)	EUtil::Log::Get().assert_(__FUNCTION__, __LOG_FILENAME__, __LINE__, cond, __VA_ARGS__); if (cond) __debugbreak() // condition, head, body and args to format body in c-style
+    #define			LOG_INFO(...)		    ELog::Log::Get().info(__FUNCTION__, __LOG_FILENAME__, __LINE__, __VA_ARGS__)		// head, body and args to format body in c-style
+    #define			LOG_WARN(...)		    ELog::Log::Get().warn(__FUNCTION__, __LOG_FILENAME__, __LINE__, __VA_ARGS__)		// head, body and args to format body in c-style
+    #define			LOG_SUCC(...)		    ELog::Log::Get().success(__FUNCTION__, __LOG_FILENAME__, __LINE__, __VA_ARGS__)	// head, body and args to format body in c-style
+    #define			LOG_ERR(...)		    ELog::Log::Get().error(__FUNCTION__, __LOG_FILENAME__, __LINE__, __VA_ARGS__)		// head, body and args to format body in c-style
+    #define			LOG_ASSERT(cond, ...)	ELog::Log::Get().assert_(__FUNCTION__, __LOG_FILENAME__, __LINE__, cond, __VA_ARGS__); if (cond) __debugbreak() // condition, head, body and args to format body in c-style
 
 #elif defined(HORDES_RELEASE)
-    #define			LOG_INFO(...)			//EUtil::Log::Get().info(__FUNCTION__, __LOG_FILENAME__, __LINE__, __VA_ARGS__)		// head, body and args to format body in c-style
-    #define			LOG_WARN(...)			//EUtil::Log::Get().warn(__FUNCTION__, __LOG_FILENAME__, __LINE__, __VA_ARGS__)		// head, body and args to format body in c-style
-    #define			LOG_SUCC(...)			//EUtil::Log::Get().success(__FUNCTION__, __LOG_FILENAME__, __LINE__, __VA_ARGS__)	    // head, body and args to format body in c-style
-    #define			LOG_ERR(...)			EUtil::Log::Get().error(__FUNCTION__, __LOG_FILENAME__, __LINE__, __VA_ARGS__)		    // head, body and args to format body in c-style
-    #define			LOG_ASSERT(cond, ...)	EUtil::Log::Get().assert_(__FUNCTION__, __LOG_FILENAME__, __LINE__, cond, __VA_ARGS__); if (cond) __debugbreak() // condition, head, body and args to format body in c-style
+    #define			LOG_INFO(...)			//ELog::Log::Get().info(__FUNCTION__, __LOG_FILENAME__, __LINE__, __VA_ARGS__)		// head, body and args to format body in c-style
+    #define			LOG_WARN(...)			//ELog::Log::Get().warn(__FUNCTION__, __LOG_FILENAME__, __LINE__, __VA_ARGS__)		// head, body and args to format body in c-style
+    #define			LOG_SUCC(...)			//ELog::Log::Get().success(__FUNCTION__, __LOG_FILENAME__, __LINE__, __VA_ARGS__)	    // head, body and args to format body in c-style
+    #define			LOG_ERR(...)			ELog::Log::Get().error(__FUNCTION__, __LOG_FILENAME__, __LINE__, __VA_ARGS__)		    // head, body and args to format body in c-style
+    #define			LOG_ASSERT(cond, ...)	ELog::Log::Get().assert_(__FUNCTION__, __LOG_FILENAME__, __LINE__, cond, __VA_ARGS__); if (cond) __debugbreak() // condition, head, body and args to format body in c-style
 
 #elif defined(HORDES_DIST)
-    #define			LOG_INFO(...)			//EUtil::Log::Get().info(__FUNCTION__, __LOG_FILENAME__, __LINE__, __VA_ARGS__)		// head, body and args to format body in c-style
-    #define			LOG_WARN(...)			//EUtil::Log::Get().warn(__FUNCTION__, __LOG_FILENAME__, __LINE__, __VA_ARGS__)		// head, body and args to format body in c-style
-    #define			LOG_SUCC(...)			//EUtil::Log::Get().success(__FUNCTION__, __LOG_FILENAME__, __LINE__, __VA_ARGS__)	    // head, body and args to format body in c-style
-    #define			LOG_ERR(...)			//EUtil::Log::Get().error(__FUNCTION__, __LOG_FILENAME__, __LINE__, __VA_ARGS__)		// head, body and args to format body in c-style
-    #define			LOG_ASSERT(cond, ...)	//EUtil::Log::Get().assert_(__FUNCTION__, __LOG_FILENAME__, __LINE__, cond, __VA_ARGS__); if (cond) __debugbreak() // condition, head, body and args to format body in c-style
+    #define			LOG_INFO(...)			//ELog::Log::Get().info(__FUNCTION__, __LOG_FILENAME__, __LINE__, __VA_ARGS__)		// head, body and args to format body in c-style
+    #define			LOG_WARN(...)			//ELog::Log::Get().warn(__FUNCTION__, __LOG_FILENAME__, __LINE__, __VA_ARGS__)		// head, body and args to format body in c-style
+    #define			LOG_SUCC(...)			//ELog::Log::Get().success(__FUNCTION__, __LOG_FILENAME__, __LINE__, __VA_ARGS__)	    // head, body and args to format body in c-style
+    #define			LOG_ERR(...)			//ELog::Log::Get().error(__FUNCTION__, __LOG_FILENAME__, __LINE__, __VA_ARGS__)		// head, body and args to format body in c-style
+    #define			LOG_ASSERT(cond, ...)	//ELog::Log::Get().assert_(__FUNCTION__, __LOG_FILENAME__, __LINE__, cond, __VA_ARGS__); if (cond) __debugbreak() // condition, head, body and args to format body in c-style
 
 #endif
 
 
 // these will be always used as long as it'd not distribution
 #ifndef HORDES_DIST
-    #define			FORCE_INFO(...)		    EUtil::Log::Get().info(__FUNCTION__, __LOG_FILENAME__, __LINE__, __VA_ARGS__)		// head, body and args to format body in c-style
-    #define			FORCE_WARN(...)		    EUtil::Log::Get().warn(__FUNCTION__, __LOG_FILENAME__, __LINE__, __VA_ARGS__)		// head, body and args to format body in c-style
-    #define			FORCE_SUCC(...)		    EUtil::Log::Get().success(__FUNCTION__, __LOG_FILENAME__, __LINE__, __VA_ARGS__)	// head, body and args to format body in c-style
-    #define			FORCE_ERR(...)		    EUtil::Log::Get().error(__FUNCTION__, __LOG_FILENAME__, __LINE__, __VA_ARGS__)		// head, body and args to format body in c-style
-    #define			FORCE_ASSERT(cond, ...)	EUtil::Log::Get().assert_(__FUNCTION__, __LOG_FILENAME__, __LINE__, cond, __VA_ARGS__); if (cond) __debugbreak() // condition, head, body and args to format body in c-style
+    #define			FORCE_INFO(...)		    ELog::Log::Get().info(__FUNCTION__, __LOG_FILENAME__, __LINE__, __VA_ARGS__)		// head, body and args to format body in c-style
+    #define			FORCE_WARN(...)		    ELog::Log::Get().warn(__FUNCTION__, __LOG_FILENAME__, __LINE__, __VA_ARGS__)		// head, body and args to format body in c-style
+    #define			FORCE_SUCC(...)		    ELog::Log::Get().success(__FUNCTION__, __LOG_FILENAME__, __LINE__, __VA_ARGS__)	// head, body and args to format body in c-style
+    #define			FORCE_ERR(...)		    ELog::Log::Get().error(__FUNCTION__, __LOG_FILENAME__, __LINE__, __VA_ARGS__)		// head, body and args to format body in c-style
+    #define			FORCE_ASSERT(cond, ...)	ELog::Log::Get().assert_(__FUNCTION__, __LOG_FILENAME__, __LINE__, cond, __VA_ARGS__); if (cond) __debugbreak() // condition, head, body and args to format body in c-style
 #endif //HORDES_DIST
 
 #endif //HORDES_PCH_H

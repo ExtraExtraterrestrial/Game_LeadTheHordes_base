@@ -2,7 +2,7 @@
 
 //<3// thanks to https://codereview.stackexchange.com/questions/187183/create-a-c-string-using-printf-style-formatting printf-like variadic templates
 
-namespace EUtil {
+namespace ELog {
 
 template<typename Func, typename File, typename H, typename B>
 void Log::info(Func func_name, File file_name, int codeline, H head, B body, ...) {
@@ -37,14 +37,14 @@ void Log::info(Func func_name, File file_name, int codeline, H head, B body, ...
 	if (showThreatLevel == InfoLvl) {
 		if (verboseLevel >= LowVerbose) {
 			std::cout << std::left 
-				<< "\x1B[36m[" << EUtil::TimeFormatter::s_time.getNowStr() << "]  "
+				<< "\x1B[36m[" << ELog::TimeFormatter::s_time.getNowStr() << "]  "
 				<< std::setw(15) << "(INFO)"
 				<< std::setw(65) << func_name
 				<< file_name << ":" << codeline << "\n"
 				<< head	<< "\033[0m\n";
 
 			logFile << std::left
-				<< "[" << EUtil::TimeFormatter::s_time.getNowStr()<< "]  "
+				<< "[" << ELog::TimeFormatter::s_time.getNowStr()<< "]  "
 				<< std::setw(15) << "(INFO)"
 				<< std::setw(65) << func_name
 				<< file_name << ":" << codeline << "\n"
@@ -65,14 +65,14 @@ void Log::info(Func func_name, File file_name, int codeline, H head) {
 	if (showThreatLevel == InfoLvl) {
 		if (verboseLevel >= LowVerbose) {
 			std::cout << std::left 
-				<< "\x1B[36m[" << EUtil::TimeFormatter::s_time.getNowStr() << "]  "
+				<< "\x1B[36m[" << ELog::TimeFormatter::s_time.getNowStr() << "]  "
 				<< std::setw(15) << "(INFO)"
 				<< std::setw(65) << func_name
 				<< file_name << ":" << codeline << "\n"
 				<< head	<< "\033[0m\n";
 
 			logFile << std::left
-				<< "[" << EUtil::TimeFormatter::s_time.getNowStr()<< "]  "
+				<< "[" << ELog::TimeFormatter::s_time.getNowStr()<< "]  "
 				<< std::setw(15) << "(INFO)"
 				<< std::setw(65) << func_name
 				<< file_name << ":" << codeline << "\n"
@@ -119,13 +119,13 @@ void Log::success(Func func_name, File file_name, int codeline, H head, B body, 
 	if (showThreatLevel == InfoLvl) {
 		if (verboseLevel >= LowVerbose) {
 			std::cout << std::left 
-				<< "\x1B[32m[" << EUtil::TimeFormatter::s_time.getNowStr() << "]  "
+				<< "\x1B[32m[" << ELog::TimeFormatter::s_time.getNowStr() << "]  "
 				<< std::setw(15) << "(SUCCESS)"
 				<< std::setw(65) << func_name
 				<< file_name << ":" << codeline << "\n"
 				<< head	<< "\033[0m\n";
 			logFile << std::left
-				<< "[" << EUtil::TimeFormatter::s_time.getNowStr()<< "]  "
+				<< "[" << ELog::TimeFormatter::s_time.getNowStr()<< "]  "
 				<< std::setw(15) << "(SUCCESS)"
 				<< std::setw(65) << func_name
 				<< file_name << ":" << codeline << "\n"
@@ -146,13 +146,13 @@ void Log::success(Func func_name, File file_name, int codeline, H head) {
 	if (showThreatLevel == InfoLvl) {
 		if (verboseLevel >= LowVerbose) {
 			std::cout << std::left 
-				<< "\x1B[32m[" << EUtil::TimeFormatter::s_time.getNowStr() << "]  "
+				<< "\x1B[32m[" << ELog::TimeFormatter::s_time.getNowStr() << "]  "
 				<< std::setw(15) << "(SUCCESS)"
 				<< std::setw(65) << func_name
 				<< file_name << ":" << codeline << "\n"
 				<< head	<< "\033[0m\n";
 			logFile << std::left
-				<< "[" << EUtil::TimeFormatter::s_time.getNowStr()<< "]  "
+				<< "[" << ELog::TimeFormatter::s_time.getNowStr()<< "]  "
 				<< std::setw(15) << "(SUCCESS)"
 				<< std::setw(65) << func_name
 				<< file_name << ":" << codeline << "\n"
@@ -199,13 +199,13 @@ void Log::warn(Func func_name, File file_name, int codeline, H head, B body, ...
 	if (showThreatLevel >= WarningLvl) {
 		if (verboseLevel >= LowVerbose) {
 			std::cout << std::left 
-				<< "\x1B[33m[" << EUtil::TimeFormatter::s_time.getNowStr() << "]  "
+				<< "\x1B[33m[" << ELog::TimeFormatter::s_time.getNowStr() << "]  "
 				<< std::setw(15) << "(WARNING)"
 				<< std::setw(65) << func_name
 				<< file_name << ":" << codeline << "\n"
 				<< head	<< "\033[0m\n";
 			logFile << std::left
-				<< "[" << EUtil::TimeFormatter::s_time.getNowStr()<< "]  "
+				<< "[" << ELog::TimeFormatter::s_time.getNowStr()<< "]  "
 				<< std::setw(15) << "(WARNING)"
 				<< std::setw(65) << func_name
 				<< file_name << ":" << codeline << "\n"
@@ -227,13 +227,13 @@ void Log::warn(Func func_name, File file_name, int codeline, H head) {
 	if (showThreatLevel >= WarningLvl) {
 		if (verboseLevel >= LowVerbose) {
 			std::cout << std::left 
-				<< "\x1B[33m[" << EUtil::TimeFormatter::s_time.getNowStr() << "]  "
+				<< "\x1B[33m[" << ELog::TimeFormatter::s_time.getNowStr() << "]  "
 				<< std::setw(15) << "(WARNING)"
 				<< std::setw(65) << func_name
 				<< file_name << ":" << codeline << "\n"
 				<< head	<< "\033[0m\n";
 			logFile << std::left
-				<< "[" << EUtil::TimeFormatter::s_time.getNowStr()<< "]  "
+				<< "[" << ELog::TimeFormatter::s_time.getNowStr()<< "]  "
 				<< std::setw(15) << "(WARNING)"
 				<< std::setw(65) << func_name
 				<< file_name << ":" << codeline << "\n"
@@ -280,13 +280,13 @@ void Log::error(Func func_name, File file_name, int codeline, H head, B body, ..
 
 	if (verboseLevel >= LowVerbose) {
 		std::cout << std::left 
-			<< "\x1B[31m[" << EUtil::TimeFormatter::s_time.getNowStr() << "]  "
+			<< "\x1B[31m[" << ELog::TimeFormatter::s_time.getNowStr() << "]  "
 			<< std::setw(15) << "(ERROR)"
 			<< std::setw(65) << func_name
 			<< file_name << ":" << codeline << "\n"
 			<< head	<< "\033[0m\n";
 		logFile << std::left
-			<< "[" << EUtil::TimeFormatter::s_time.getNowStr()<< "]  "
+			<< "[" << ELog::TimeFormatter::s_time.getNowStr()<< "]  "
 			<< std::setw(15) << "(ERROR)"
 			<< std::setw(65) << func_name
 			<< file_name << ":" << codeline << "\n"
@@ -307,13 +307,13 @@ void Log::error(Func func_name, File file_name, int codeline, H head) {
 
 	if (verboseLevel >= LowVerbose) {
 		std::cout << std::left 
-			<< "\x1B[31m[" << EUtil::TimeFormatter::s_time.getNowStr() << "]  "
+			<< "\x1B[31m[" << ELog::TimeFormatter::s_time.getNowStr() << "]  "
 			<< std::setw(15) << "(ERROR)"
 			<< std::setw(65) << func_name
 			<< file_name << ":" << codeline << "\n"
 			<< head	<< "\033[0m\n";
 		logFile << std::left
-			<< "[" << EUtil::TimeFormatter::s_time.getNowStr()<< "]  "
+			<< "[" << ELog::TimeFormatter::s_time.getNowStr()<< "]  "
 			<< std::setw(15) << "(ERROR)"
 			<< std::setw(65) << func_name
 			<< file_name << ":" << codeline << "\n"
@@ -359,13 +359,13 @@ void Log::assert_(Func func_name, File file_name, int codeline, bool condition, 
 
 		if (verboseLevel >= LowVerbose) {
 			std::cout << std::left
-				<< "\x1B[31m[" << EUtil::TimeFormatter::s_time.getNowStr() << "]  "
+				<< "\x1B[31m[" << ELog::TimeFormatter::s_time.getNowStr() << "]  "
 				<< std::setw(15) << "(ASSERTION)"
 				<< std::setw(65) << func_name
 				<< file_name << ":" << codeline << "\n"
 				<< head << "\033[0m\n";
 			logFile << std::left
-				<< "[" << EUtil::TimeFormatter::s_time.getNowStr() << "]  "
+				<< "[" << ELog::TimeFormatter::s_time.getNowStr() << "]  "
 				<< std::setw(15) << "(ASSERTION)"
 				<< std::setw(65) << func_name
 				<< file_name << ":" << codeline << "\n"
@@ -386,13 +386,13 @@ void Log::assert_(Func func_name, File file_name, int codeline, bool condition, 
 	if (condition) {
 		if (verboseLevel >= LowVerbose) {
 			std::cout << std::left 
-				<< "\x1B[31m[" << EUtil::TimeFormatter::s_time.getNowStr() << "]  "
+				<< "\x1B[31m[" << ELog::TimeFormatter::s_time.getNowStr() << "]  "
 				<< std::setw(15) << "(ASSERTION)"
 				<< std::setw(65) << func_name
 				<< file_name << ":" << codeline << "\n"
 				<< head	<< "\033[0m\n";
 			logFile << std::left
-				<< "[" << EUtil::TimeFormatter::s_time.getNowStr()<< "]  "
+				<< "[" << ELog::TimeFormatter::s_time.getNowStr()<< "]  "
 				<< std::setw(15) << "(ASSERTION)"
 				<< std::setw(65) << func_name
 				<< file_name << ":" << codeline << "\n"

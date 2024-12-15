@@ -9,7 +9,7 @@ workspace "LeadTheHordes"
     }
 	
 	
-	project "Eris_Utility"
+	project "Eris_Log"
 		kind "StaticLib"
 		staticruntime "off"
 		language "C++"

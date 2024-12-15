@@ -4,11 +4,11 @@
 #include <fstream>
 #include <iostream>
 
-#include "Eris_Utility/Log.h"
+#include "Eris_Log/Log.h"
 
 
 
-namespace EUtil {
+namespace ELog {
 
 Log Log::instance{};
 

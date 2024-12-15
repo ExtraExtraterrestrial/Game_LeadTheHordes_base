@@ -13,7 +13,7 @@ workspace "LeadTheHordes"
     }
 
     group "dependencies"
-        include "Eris_Utility"
+        include "Eris_Log"
     group ""
 
     project "LeadTheHordes"
@@ -62,19 +62,19 @@ workspace "LeadTheHordes"
         }
         
         libdirs {
-            "Eris_Utility/lib/" .. outputdirname,
+            "Eris_Log/lib/" .. outputdirname,
             sfmldir .. "/lib"
         }
         
 
         links {
-            "Eris_Utility"
+            "Eris_Log"
         }
 
         includedirs {
             "LeadTheHordes/src",
             sfmldir .. "/include",
-            "Eris_Utility/include"
+            "Eris_Log/include"
         }
 
         pchheader "Hordes_pch.h"

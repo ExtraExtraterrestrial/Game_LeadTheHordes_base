@@ -9,7 +9,7 @@
 // #include "../src/Log.tpp" at the bottom
 // #define LOG_DO_NOT_AUTOSTART use this header if you want to change filename
 
-namespace EUtil {
+namespace ELog {
 
 #if defined(__linux__) || defined(LINUX)
 	#define				DIR_DELIMITER	 	"/"
