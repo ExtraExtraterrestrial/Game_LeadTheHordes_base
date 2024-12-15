@@ -2,9 +2,7 @@
 
 !**/CMakeLists.txt
 
-!./*.bat
-!./*.bsh
-!./*.sh
+./*
 
 !LeadTheHordes/src/**
 !LeadTheHordes/logs/**
