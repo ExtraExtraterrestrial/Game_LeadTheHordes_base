@@ -1,5 +1,8 @@
 cmake_minimum_required(VERSION 3.28)
 include(FetchContent)
+# include(CheckTypeSize)
+# include(ExternalProject)
+
 
 ### PACKAGES TO PREINSTALL ON LINUX ###
 # libxrandr-dev \
@@ -14,19 +17,82 @@ include(FetchContent)
 
 project(LeadTheHordes)
 
+option(BUILD_SHARED_LIBS "Build shared libraries" OFF)
+
 # configs
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
-set(SFML_VERSION "2.6.x")
 
-option(BUILD_SHARED_LIBS "Build shared libraries" OFF)
-set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
-
-add_executable(LeadTheHordes)
+# set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
 
 add_compile_definitions(SFML_STATIC)
+
+# Include dependencies
+add_subdirectory(Eris_Log)
+
+include(FetchContent)
+FetchContent_Declare(SFML
+    GIT_REPOSITORY https://github.com/SFML/SFML.git
+    GIT_TAG 2.6.x
+    GIT_SHALLOW ON
+    SOURCE_DIR  ${CMAKE_SOURCE_DIR}/SFML
+    EXCLUDE_FROM_ALL
+    SYSTEM
+)
+
+FetchContent_MakeAvailable(SFML)
+
+# add_subdirectory(SFML ${CMAKE_SOURCE_DIR}/SFML/build)
+
+# set_property(DIRECTORY SFML
+#     PROPERTY CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/SFML/lib/static
+# )
+# set_property(DIRECTORY SFML
+#     PROPERTY CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/SFML/lib
+# )
+# set_property(DIRECTORY SFML
+#     PROPERTY CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/SFML/bin
+# )
+
+# ExternalProject_Add(SFML
+#     PREFIX              ${CMAKE_SOURCE_DIR}/SFML
+#     SOURCE_DIR          ${CMAKE_SOURCE_DIR}/SFML
+#     BINARY_DIR          ${CMAKE_SOURCE_DIR}/SFML/build
+#     INSTALL_DIR         ${CMAKE_SOURCE_DIR}/SFML
+#     EXCLUDE_FROM_ALL
+#     CMAKE_ARGS
+#         -DCMAKE_INSTALL_PREFIX=${CMAKE_SOURCE_DIR}/SFML
+#         -DBUILD_SHARED_LIBS=OFF
+# )
+
+
+
+add_executable(LeadTheHordes)
+target_compile_features(LeadTheHordes PRIVATE cxx_std_17)
+
+
+
+target_link_libraries(LeadTheHordes PRIVATE 
+    sfml-graphics
+    sfml-audio
+)
+
 target_compile_options(LeadTheHordes PRIVATE -Wall)
+
+if(CMAKE_SIZEOF_VOID_P EQUAL 8)
+    set(ARCHITECTURE x64)
+else()
+    set(ARCHITECTURE x86)
+endif()
+
+if(WIN32)
+    add_custom_command(
+        TARGET LeadTheHordes
+        COMMENT "Copy OpenAL DLL"
+        PRE_BUILD COMMAND ${CMAKE_COMMAND} -E copy ${SFML_SOURCE_DIR}/extlibs/bin/${ARCHITECTURE}/openal32.dll $<TARGET_FILE_DIR:LeadTheHordes>
+        VERBATIM)
+endif()
 
 
 # if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU" OR CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
@@ -38,9 +104,10 @@ target_compile_options(LeadTheHordes PRIVATE -Wall)
 
 set(CMAKE_CONFIGURATION_TYPES Debug;Release CACHE STRING build_configurations)
 
-set(OUTPUT_DIR_NAME ${CMAKE_SYSTEM_NAME}_${CMAKE_GENERATOR}_${CMAKE_BUILD_TYPE}-${CMAKE_SYSTEM_PROCESSOR})
+set(OUTPUT_DIR_NAME ${CMAKE_SYSTEM_NAME}_${CMAKE_CXX_COMPILER_ID}-${ARCHITECTURE})
 set(PROJECT_BINARY_DIR ${CMAKE_CURRENT_LIST_DIR}/bin/${OUTPUT_DIR_NAME})
-# set(OBJECT_DIR ${CMAKE_CURRENT_LIST_DIR}/obj/${OUTPUT_DIR_NAME})
+
+# check_type_size("void*" SIZEOF_VOID_P BUILTIN_TYPES_ONLY)
 
 # SOURCES - all the source files of LeadTheHordes
 file(GLOB_RECURSE SOURCES CONFIGURE_DEPENDS
@@ -50,39 +117,12 @@ file(GLOB_RECURSE SOURCES CONFIGURE_DEPENDS
     ${CMAKE_SOURCE_DIR}/LeadTheHordes/src/*.h
 )
 
-
-FetchContent_Declare(sfml
-    GIT_REPOSITORY https://github.com/SFML/SFML.git
-    GIT_TAG 2.6.x
-    GIT_SHALLOW ON
-    EXCLUDE_FROM_ALL
-    SYSTEM
-    SOURCE_DIR ${CMAKE_SOURCE_DIR}/SFML
-    PREFIX ${CMAKE_SOURCE_DIR}/SFML
-)
-
-FetchContent_MakeAvailable(sfml)
-
-
-if(NOT sfml_POPULATED)
-    FetchContent_Populate(sfml)
-    add_subdirectory(${sfml_SOURCE_DIR} ${sfml_BINARY_DIR})
-endif()
-
-# Include dependencies
-add_subdirectory(Eris_Log)
-
 file(COPY ${CMAKE_SOURCE_DIR}/LeadTheHordes/config DESTINATION ${PROJECT_BINARY_DIR})
-    
 
 # set definition HORDES_DEBUG or HORDES_RELEASE
 target_compile_definitions (LeadTheHordes
     PRIVATE HORDES_$<$<CONFIG:Debug>:DEBUG>$<$<CONFIG:Release>:RELEASE>
 )
-
-# set_target_properties(LeadTheHordes PROPERTIES
-#     RUNTIME_OUTPUT_DIRECTORY ${BINARY_DIR}
-# )
 
 # Target source files
 target_sources(LeadTheHordes PRIVATE ${SOURCES})
