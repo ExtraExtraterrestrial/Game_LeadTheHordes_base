@@ -10,14 +10,10 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
-set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
+set(CMAKE_CONFIGURATION_TYPES Debug;Release CACHE STRING build_configurations)
 
-# if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU" OR CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
-#     target_link_options(MyTarget PRIVATE
-#         $<$<CONFIG:Debug>:-static-libgcc -static-libstdc++>
-#         $<$<CONFIG:Release>:-static-libgcc -static-libstdc++>
-#     )
-# endif()
+# set variables
+
 
 if(CMAKE_SIZEOF_VOID_P EQUAL 8)
     set(ARCHITECTURE x64)
@@ -26,15 +22,53 @@ else()
 endif()
 
 
-set(OUTPUT_DIR_NAME ${CMAKE_SYSTEM_NAME}_${CMAKE_CXX_COMPILER_ID}-${ARCHITECTURE})
 
-set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/lib/${OUTPUT_DIR_NAME})
-set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/lib/${OUTPUT_DIR_NAME})
-set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/bin/${OUTPUT_DIR_NAME})
+# set(OUTPUT_DIR_NAME                         ${CMAKE_SYSTEM_NAME}_${CMAKE_CXX_COMPILER_ID})
 
+# # set output behaviors
+# set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY          ${CMAKE_SOURCE_DIR}/lib/${OUTPUT_DIR_NAME}-${ARCHITECTURE})
+# set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY_RELEASE  ${CMAKE_SOURCE_DIR}/lib/${OUTPUT_DIR_NAME}_RELEASE-${ARCHITECTURE})
+# set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY_DEBUG    ${CMAKE_SOURCE_DIR}/lib/${OUTPUT_DIR_NAME}_DEBUG-${ARCHITECTURE})
+
+# set(CMAKE_LIBRARY_OUTPUT_DIRECTORY          ${CMAKE_SOURCE_DIR}/lib/${OUTPUT_DIR_NAME}-${ARCHITECTURE})
+# set(CMAKE_LIBRARY_OUTPUT_DIRECTORY_RELEASE  ${CMAKE_SOURCE_DIR}/lib/${OUTPUT_DIR_NAME}_RELEASE-${ARCHITECTURE})
+# set(CMAKE_LIBRARY_OUTPUT_DIRECTORY_DEBUG    ${CMAKE_SOURCE_DIR}/lib/${OUTPUT_DIR_NAME}_DEBUG-${ARCHITECTURE})
+
+# set(CMAKE_RUNTIME_OUTPUT_DIRECTORY          ${CMAKE_SOURCE_DIR}/bin/${OUTPUT_DIR_NAME}-${ARCHITECTURE})
+# set(CMAKE_RUNTIME_OUTPUT_DIRECTORY_RELEASE  ${CMAKE_SOURCE_DIR}/bin/${OUTPUT_DIR_NAME}_RELEASE-${ARCHITECTURE})
+# set(CMAKE_RUNTIME_OUTPUT_DIRECTORY_DEBUG    ${CMAKE_SOURCE_DIR}/bin/${OUTPUT_DIR_NAME}_DEBUG-${ARCHITECTURE})
+
+
+set(OUTPUT_DIR_NAME                         ${CMAKE_SYSTEM_NAME}_${CMAKE_CXX_COMPILER_ID}-${ARCHITECTURE})
+
+# set output behaviors
+set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY          ${CMAKE_SOURCE_DIR}/lib/${OUTPUT_DIR_NAME})
+set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY_RELEASE  ${CMAKE_SOURCE_DIR}/lib/${OUTPUT_DIR_NAME})
+set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY_DEBUG    ${CMAKE_SOURCE_DIR}/lib/${OUTPUT_DIR_NAME})
+
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY          ${CMAKE_SOURCE_DIR}/lib/${OUTPUT_DIR_NAME})
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY_RELEASE  ${CMAKE_SOURCE_DIR}/lib/${OUTPUT_DIR_NAME})
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY_DEBUG    ${CMAKE_SOURCE_DIR}/lib/${OUTPUT_DIR_NAME})
+
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY          ${CMAKE_SOURCE_DIR}/bin/${OUTPUT_DIR_NAME})
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY_RELEASE  ${CMAKE_SOURCE_DIR}/bin/${OUTPUT_DIR_NAME})
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY_DEBUG    ${CMAKE_SOURCE_DIR}/bin/${OUTPUT_DIR_NAME})
+
+
+
+# set to use static library runtime
+set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
+
+# needs testing for gcc and clang
+# if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU" OR CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
+#     target_link_options(MyTarget PRIVATE
+#         $<$<CONFIG:Debug>:-static-libgcc -static-libstdc++>
+#         $<$<CONFIG:Release>:-static-libgcc -static-libstdc++>
+#     )
+# endif()
+
+# dependencies
 add_compile_definitions(SFML_STATIC)
-
-add_subdirectory(Eris_Log)
 
 FetchContent_Declare(sfml
     GIT_REPOSITORY  https://github.com/SFML/SFML.git
@@ -45,32 +79,40 @@ FetchContent_Declare(sfml
 )
 FetchContent_MakeAvailable(sfml)
 
+add_subdirectory(Eris_Log)
+
 
 add_executable(LeadTheHordes)
 target_compile_features(LeadTheHordes PRIVATE cxx_std_17)
+
+
+set_property(TARGET LeadTheHordes 
+    PROPERTY VS_DEBUGGER_WORKING_DIRECTORY ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}
+)
+
 set_property(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY VS_STARTUP_PROJECT LeadTheHordes)
 
-target_link_libraries(LeadTheHordes PRIVATE 
-    sfml-graphics
-    sfml-audio
-)
+
+
 
 if(WIN32)
     add_custom_command(
         TARGET LeadTheHordes
         COMMENT "Copy OpenAL DLL"
         PRE_BUILD COMMAND ${CMAKE_COMMAND} -E copy ${SFML_SOURCE_DIR}/extlibs/bin/${ARCHITECTURE}/openal32.dll $<TARGET_FILE_DIR:LeadTheHordes>
+        COMMENT Copying OpenAL dll to output directory
         VERBATIM
     )
 endif()
 
-# check if this copies on build or on cmake build omg I hate cmake so much
-file(COPY ${CMAKE_SOURCE_DIR}/LeadTheHordes/config DESTINATION ${CMAKE_RUNTIME_OUTPUT_DIRECTORY})
+add_custom_command(
+    TARGET LeadTheHordes POST_BUILD 
+    COMMAND ${CMAKE_COMMAND} -E copy 
+    ${CMAKE_SOURCE_DIR}/LeadTheHordes/config
+    $<TARGET_FILE_DIR:LeadTheHordes>
+    COMMENT Copying config files to output directory
+)
 
-set(CMAKE_CONFIGURATION_TYPES Debug;Release CACHE STRING build_configurations)
-
-
-# check_type_size("void*" SIZEOF_VOID_P BUILTIN_TYPES_ONLY)
 
 # SOURCES - all the source files of LeadTheHordes
 file(GLOB_RECURSE SOURCES CONFIGURE_DEPENDS
@@ -101,28 +143,19 @@ target_include_directories(LeadTheHordes PRIVATE
 
 # Libraries
 target_link_directories(LeadTheHordes PRIVATE
-    ${CMAKE_SOURCE_DIR}/Eris_Log/lib/${OUTPUT_DIR_NAME}
-    # ${CMAKE_SOURCE_DIR}/SFML/lib
+    # ${CMAKE_SOURCE_DIR}/lib/${OUTPUT_DIR_NAME}
     sfml-SOURCE_DIR
 )
 
 # Link dependencies
 target_link_libraries(LeadTheHordes PRIVATE
     Eris_Log
+    sfml-graphics
+    sfml-audio
     
     # sfml-graphics-s$<$<CONFIG:Debug>:-d>
     # sfml-audio-s$<$<CONFIG:Debug>:-d>
     # sfml-window-s$<$<CONFIG:Debug>:-d>
     # sfml-system-s$<$<CONFIG:Debug>:-d>
     
-    # flac
-    # vorbisenc
-    # vorbisfile
-    # vorbis
-    # ogg
-    # openal32
-    # winmm
-    # opengl32
-    # freetype
-    # gdi32
 )

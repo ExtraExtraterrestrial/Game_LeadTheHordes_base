@@ -4,6 +4,7 @@
 #include <fstream>
 #include <iostream>
 
+#include "Eris_Log/TimeFormatter.h"
 #include "Eris_Log/Log.h"
 
 
@@ -33,8 +34,8 @@ Log::Log(int threatLevel, int verboseLevel)
 
 	commandBuffer  = "mkdir logs";
 	commandBuffer += DIR_DELIMITER;
-	commandBuffer += TimeFormatter::s_programStart.getStr();
-	commandBuffer += "-";
+	commandBuffer += TimeFormatter::programStart.getStr();
+	commandBuffer += "_";
 	commandBuffer += LOG_DEBUG_CHAR;
 	commandBuffer += " ";
 	commandBuffer += NULL_FILE_REDIRECT;
@@ -58,29 +59,17 @@ void Log::startup(std::string_view filePrefix) {
 
 	std::string filePath = "logs";
 	filePath += DIR_DELIMITER;
-	filePath += TimeFormatter::s_programStart.getStr();
+	filePath += TimeFormatter::programStart.getStr();
 	filePath += "-";
 	filePath += LOG_DEBUG_CHAR;
 	filePath += DIR_DELIMITER;
 	filePath += filePrefix;
-	filePath += TimeFormatter::s_programStart.getStr();
-	filePath += "-";
+	filePath += TimeFormatter::programStart.getStr();
+	filePath += "_";
 	filePath += LOG_DEBUG_CHAR;
 	filePath += ".log";
 
 	strcpy_s(this->logFilePath, filePath.c_str());
-
-	//strcpy_s(logFilePath, "logs");
-	//strcat_s(logFilePath, DIR_DELIMITER);
-	//strncat_s(logFilePath, TimeFormatter::s_programStart.getStr(), std::strlen(TimeFormatter::s_programStart.getStr()));
-	//strcat_s(logFilePath, "-");
-	//strcat_s(logFilePath, LOG_DEBUG_CHAR);
-	//strcat_s(logFilePath, DIR_DELIMITER);
-	//strcat_s(logFilePath, "EUtil__");
-	//strncat_s(logFilePath, TimeFormatter::s_programStart.getStr(), std::strlen(TimeFormatter::s_programStart.getStr()));
-	//strcat_s(logFilePath, "-");
-	//strcat_s(logFilePath, LOG_DEBUG_CHAR);
-	//strcat_s(logFilePath, ".log");
 
 	logFile.open(logFilePath);
 
@@ -99,7 +88,7 @@ void Log::startup(std::string_view filePrefix) {
 	#endif
 
 
-	std::cout << std::setw(36) << "\x1B[35m[START TIME]\033[0m" << TimeFormatter::s_datetime.getNowStr() << std::endl;
+	std::cout << std::setw(36) << "\x1B[35m[START TIME]\033[0m" << TimeFormatter::datetime.getNowStr() << std::endl;
 	std::cout << "\x1B[35m" << line << "\033[0m\n" << std::endl;
 
 	if (logFile.is_open()) {
@@ -116,17 +105,17 @@ void Log::startup(std::string_view filePrefix) {
 				logFile << std::setw(36) << "\x1B[35m[C++ VERSION]\033[0m" << __cplusplus << std::endl << std::endl;
 		#endif
 
-		logFile << std::setw(36) << "[START TIME]" << TimeFormatter::s_datetime.getNowStr() << std::endl;
+		logFile << std::setw(36) << "[START TIME]" << TimeFormatter::datetime.getNowStr() << std::endl;
 		logFile << line << std::endl;
 
 	} else {
 
 		std::cout << std::left 
-			<< "\x1B[31m[" << TimeFormatter::s_time.getNowStr() << "]  " << "(ERROR)\n"
+			<< "\x1B[31m[" << TimeFormatter::time.getNowStr() << "]  " << "(ERROR)\n"
 			<< "FAILED TO OPEN LOG FILE" << "\033[0m\n" << logFilePath << "\n";
 
-		commandBuffer = "pause ";
-		commandBuffer = NULL_FILE_REDIRECT;
+		commandBuffer  = "pause ";
+		commandBuffer += NULL_FILE_REDIRECT;
 
 		system(commandBuffer.c_str());
 		commandBuffer = "";

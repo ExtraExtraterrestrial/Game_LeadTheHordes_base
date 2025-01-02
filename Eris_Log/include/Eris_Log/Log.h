@@ -4,7 +4,6 @@
 #include <iomanip>
 #include <cstring>
 
-#include "TimeFormatter.h"
 
 // #include "../src/Log.tpp" at the bottom
 // #define LOG_DO_NOT_AUTOSTART use this header if you want to change filename

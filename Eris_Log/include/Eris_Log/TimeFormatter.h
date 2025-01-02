@@ -13,19 +13,9 @@ public:
 	inline const time_t&		getRaw() const	{ return this->last_raw_time; }
 	inline const tm&			getTm()	 const	{ return this->last_tm_time; }
 
-	inline const char* getNowStr() {
-		std::time(&last_raw_time);
-		localtime_s(&last_tm_time, &last_raw_time);
-		strftime(str, 64, time_format, &last_tm_time);
+	const char *getNowStr();
 
-		return this->str;
-	}
-
-	inline void update() {
-		std::time(&last_raw_time);
-		localtime_s(&last_tm_time, &last_raw_time);
-		strftime(str, 64, time_format, &last_tm_time);
-	}
+	void update();
 
 	void changeFormat(const char* newFormat);
 
@@ -37,12 +27,16 @@ private:
 	char str[64];
 	char time_format[32];
 
+
 public:
-	static TimeFormatter s_datetime;
-	static TimeFormatter s_date;
-	static TimeFormatter s_time;
-	static TimeFormatter s_file;
-	static TimeFormatter s_programStart;
+
+	static TimeFormatter datetime;
+	static TimeFormatter date;
+	static TimeFormatter time;
+	static TimeFormatter file;
+	static const TimeFormatter programStart;
+
 };
+
 
 }

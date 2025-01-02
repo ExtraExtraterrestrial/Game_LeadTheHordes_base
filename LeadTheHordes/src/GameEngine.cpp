@@ -20,7 +20,7 @@ inline void GameEngine::initWindow() {
 
 	settings.win_ini = Utils::mapFromIni(settings.win_configFile);
 
-	LOG_ASSERT(settings.win_ini["__error__"] != "", settings.win_ini["__error__"], "Please check the file " + settings.win_configFile);
+	LOG_ASSERT(settings.win_ini["__error__"] != "", settings.win_ini["__error__"], "Please check the file at: " + settings.win_configFile);
 
 
 	settings.win_contextSettings.antialiasingLevel = std::stoi(settings.win_ini["antialiasing"]);
