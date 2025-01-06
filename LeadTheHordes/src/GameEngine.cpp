@@ -22,7 +22,6 @@ inline void GameEngine::initWindow() {
 
 	LOG_ASSERT(settings.win_ini["__error__"] != "", settings.win_ini["__error__"], "Please check the file at: " + settings.win_configFile);
 
-
 	settings.win_contextSettings.antialiasingLevel = std::stoi(settings.win_ini["antialiasing"]);
 
 	settings.changeVideomode(std::stoi(settings.win_ini["window_width"]), std::stoi(settings.win_ini["window_height"]));
@@ -50,7 +49,6 @@ inline void GameEngine::initKeys() {
 }
 
 inline void GameEngine::initStates() {
-
 
 	//state_menu.init();
 	//state_game.init();

@@ -3,9 +3,9 @@
 #include <cstdarg>
 #include <iomanip>
 #include <cstring>
-
-
 // #include "../src/Log.tpp" at the bottom
+
+
 // #define LOG_DO_NOT_AUTOSTART use this header if you want to change filename
 
 namespace ELog {

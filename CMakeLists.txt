@@ -14,7 +14,6 @@ set(CMAKE_CONFIGURATION_TYPES Debug;Release CACHE STRING build_configurations)
 
 # set variables
 
-
 if(CMAKE_SIZEOF_VOID_P EQUAL 8)
     set(ARCHITECTURE x64)
 else()
@@ -55,7 +54,6 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY_RELEASE  ${CMAKE_SOURCE_DIR}/bin/${OUTPUT_DIR
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY_DEBUG    ${CMAKE_SOURCE_DIR}/bin/${OUTPUT_DIR_NAME})
 
 
-
 # set to use static library runtime
 set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
 
@@ -70,29 +68,32 @@ set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
 # dependencies
 add_compile_definitions(SFML_STATIC)
 
-FetchContent_Declare(sfml
+FetchContent_Declare(SFML
     GIT_REPOSITORY  https://github.com/SFML/SFML.git
     GIT_TAG         2.6.x
     GIT_SHALLOW     ON
+
+    # PREFIX          ${CMAKE_SOURCE_DIR}/SFML
+    # TMP_DIR         ${CMAKE_SOURCE_DIR}/SFML/tmp
+    # STAMP_DIR       ${CMAKE_SOURCE_DIR}/SFML/stamp
+    SOURCE_DIR      ${CMAKE_SOURCE_DIR}/SFML
+    # BINARY_DIR      ${CMAKE_SOURCE_DIR}/SFML/build
     EXCLUDE_FROM_ALL
     SYSTEM
 )
-FetchContent_MakeAvailable(sfml)
+
+FetchContent_MakeAvailable(SFML)
 
 add_subdirectory(Eris_Log)
 
-
+# Lead The Hordes project
 add_executable(LeadTheHordes)
-target_compile_features(LeadTheHordes PRIVATE cxx_std_17)
-
 
 set_property(TARGET LeadTheHordes 
     PROPERTY VS_DEBUGGER_WORKING_DIRECTORY ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}
 )
 
 set_property(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY VS_STARTUP_PROJECT LeadTheHordes)
-
-
 
 
 if(WIN32)
@@ -144,7 +145,7 @@ target_include_directories(LeadTheHordes PRIVATE
 # Libraries
 target_link_directories(LeadTheHordes PRIVATE
     # ${CMAKE_SOURCE_DIR}/lib/${OUTPUT_DIR_NAME}
-    sfml-SOURCE_DIR
+    SFML-SOURCE_DIR
 )
 
 # Link dependencies
