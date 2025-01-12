@@ -15,7 +15,6 @@ GameEngine::GameEngine()
 
 
 // initializers
-#include <iostream>
 inline void GameEngine::initWindow() {
 
 	settings.win_ini = Utils::mapFromIni(settings.win_configFile);
