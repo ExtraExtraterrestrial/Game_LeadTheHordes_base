@@ -4,7 +4,6 @@ include(FetchContent)
 project(LeadTheHordes)
 
 # configs
-
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
@@ -23,20 +22,6 @@ add_compile_definitions(SFML_STATIC)
 #     )
 # endif()
 
-FetchContent_Declare(SFML
-    GIT_REPOSITORY  https://github.com/SFML/SFML.git
-    GIT_TAG         2.6.x
-    GIT_SHALLOW     ON
-    SOURCE_DIR      ${CMAKE_SOURCE_DIR}/SFML
-    EXCLUDE_FROM_ALL
-    SYSTEM
-)
-
-FetchContent_MakeAvailable(SFML)
-
-add_subdirectory(Eris_Log)
-
-add_executable(LeadTheHordes)
 
 
 
@@ -60,59 +45,50 @@ set(CMAKE_LIBRARY_OUTPUT_DIRECTORY          ${CMAKE_SOURCE_DIR}/lib/${CMAKE_SYST
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY_DEBUG    ${CMAKE_SOURCE_DIR}/lib/${CMAKE_SYSTEM_NAME}_${CMAKE_CXX_COMPILER_ID}_DEBUG-${ARCHITECTURE})
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY_RELEASE  ${CMAKE_SOURCE_DIR}/lib/${CMAKE_SYSTEM_NAME}_${CMAKE_CXX_COMPILER_ID}_RELEASE-${ARCHITECTURE})
 
-set_property(TARGET LeadTheHordes PROPERTY VS_DEBUGGER_WORKING_DIRECTORY ${CMAKE_LIBRARY_OUTPUT_DIRECTORY})
-
-if (MSVC)
-    if(CMAKE_CONFIGURATION_TYPES)
-        foreach(config_type ${CMAKE_CONFIGURATION_TYPES})
-            if(config_type MATCHES Debug)
-                set_property(TARGET LeadTheHordes PROPERTY VS_DEBUGGER_WORKING_DIRECTORY ${CMAKE_LIBRARY_OUTPUT_DIRECTORY_DEBUG})
-            elseif(config_type MATCHES Release)
-                set_property(TARGET LeadTheHordes PROPERTY VS_DEBUGGER_WORKING_DIRECTORY ${CMAKE_RUNTIME_OUTPUT_DIRECTORY_RELEASE})
-            endif()
-        endforeach()
-    elseif(CMAKE_BUILD_TYPE MATCHES Debug)
-        set_property(TARGET LeadTheHordes PROPERTY VS_DEBUGGER_WORKING_DIRECTORY ${CMAKE_LIBRARY_OUTPUT_DIRECTORY_DEBUG})
-    elseif(CMAKE_BUILD_TYPE MATCHES Release)
-        set_property(TARGET LeadTheHordes PROPERTY VS_DEBUGGER_WORKING_DIRECTORY ${CMAKE_RUNTIME_OUTPUT_DIRECTORY_RELEASE})
-    endif()
-endif()
-
-# set output behaviors
-# set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY          ${CMAKE_SOURCE_DIR}/lib/${CMAKE_SYSTEM_NAME}_${CMAKE_CXX_COMPILER_ID}-${ARCHITECTURE})
-# set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY_RELEASE  ${CMAKE_SOURCE_DIR}/lib/${CMAKE_SYSTEM_NAME}_${CMAKE_CXX_COMPILER_ID}-${ARCHITECTURE})
-# set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY_DEBUG    ${CMAKE_SOURCE_DIR}/lib/${CMAKE_SYSTEM_NAME}_${CMAKE_CXX_COMPILER_ID}-${ARCHITECTURE})
-
-# set(CMAKE_LIBRARY_OUTPUT_DIRECTORY          ${CMAKE_SOURCE_DIR}/lib/${CMAKE_SYSTEM_NAME}_${CMAKE_CXX_COMPILER_ID}-${ARCHITECTURE})
-# set(CMAKE_LIBRARY_OUTPUT_DIRECTORY_RELEASE  ${CMAKE_SOURCE_DIR}/lib/${CMAKE_SYSTEM_NAME}_${CMAKE_CXX_COMPILER_ID}-${ARCHITECTURE})
-# set(CMAKE_LIBRARY_OUTPUT_DIRECTORY_DEBUG    ${CMAKE_SOURCE_DIR}/lib/${CMAKE_SYSTEM_NAME}_${CMAKE_CXX_COMPILER_ID}-${ARCHITECTURE})
-
-# set(CMAKE_RUNTIME_OUTPUT_DIRECTORY          ${CMAKE_SOURCE_DIR}/bin/${CMAKE_SYSTEM_NAME}_${CMAKE_CXX_COMPILER_ID}-${ARCHITECTURE})
-# set(CMAKE_RUNTIME_OUTPUT_DIRECTORY_RELEASE  ${CMAKE_SOURCE_DIR}/bin/${CMAKE_SYSTEM_NAME}_${CMAKE_CXX_COMPILER_ID}-${ARCHITECTURE})
-# set(CMAKE_RUNTIME_OUTPUT_DIRECTORY_DEBUG    ${CMAKE_SOURCE_DIR}/bin/${CMAKE_SYSTEM_NAME}_${CMAKE_CXX_COMPILER_ID}-${ARCHITECTURE})
 
 
+FetchContent_Declare(SFML
+    GIT_REPOSITORY  https://github.com/SFML/SFML.git
+    GIT_TAG         2.6.x
+    GIT_SHALLOW     ON
+    SOURCE_DIR      ${CMAKE_SOURCE_DIR}/SFML
+    EXCLUDE_FROM_ALL
+    SYSTEM
+)
 
+FetchContent_MakeAvailable(SFML)
 
+add_subdirectory(Eris_Log)
+
+add_executable(LeadTheHordes)
 set_property(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY VS_STARTUP_PROJECT LeadTheHordes)
+
+
+set_property(TARGET LeadTheHordes PROPERTY VS_DEBUGGER_WORKING_DIRECTORY "$<TARGET_FILE_DIR:LeadTheHordes>")
 
 
 if(WIN32)
     add_custom_command(
         TARGET LeadTheHordes
-        COMMENT "Copy OpenAL DLL"
-        PRE_BUILD COMMAND ${CMAKE_COMMAND} -E copy ${SFML_SOURCE_DIR}/extlibs/bin/${ARCHITECTURE}/openal32.dll $<TARGET_FILE_DIR:LeadTheHordes>
+        PRE_BUILD COMMAND ${CMAKE_COMMAND} 
+        ARGS -E copy ${SFML_SOURCE_DIR}/extlibs/bin/${ARCHITECTURE}/openal32.dll $<TARGET_FILE_DIR:LeadTheHordes>
         COMMENT Copying OpenAL dll to output directory
         VERBATIM
     )
 endif()
 
 add_custom_command(
-    TARGET LeadTheHordes POST_BUILD 
-    COMMAND ${CMAKE_COMMAND} -E copy 
-    ${CMAKE_SOURCE_DIR}/LeadTheHordes/config
-    ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}
-    COMMENT Copying config files to output directory
+    TARGET LeadTheHordes
+    POST_BUILD
+    COMMAND ${CMAKE_COMMAND}
+    ARGS -E copy_directory ${CMAKE_SOURCE_DIR}/LeadTheHordes/config $<TARGET_FILE_DIR:LeadTheHordes>/config
+    COMMENT Copying configs to output directory
+    VERBATIM
+)
+
+# set definition HORDES_DEBUG or HORDES_RELEASE
+target_compile_definitions (LeadTheHordes
+    PRIVATE HORDES_$<$<CONFIG:Debug>:DEBUG>$<$<CONFIG:Release>:RELEASE>
 )
 
 
@@ -122,12 +98,6 @@ file(GLOB_RECURSE SOURCES CONFIGURE_DEPENDS
     ${CMAKE_SOURCE_DIR}/LeadTheHordes/src/*.tpp
     ${CMAKE_SOURCE_DIR}/LeadTheHordes/src/*.hpp
     ${CMAKE_SOURCE_DIR}/LeadTheHordes/src/*.h
-)
-
-
-# set definition HORDES_DEBUG or HORDES_RELEASE
-target_compile_definitions (LeadTheHordes
-    PRIVATE HORDES_$<$<CONFIG:Debug>:DEBUG>$<$<CONFIG:Release>:RELEASE>
 )
 
 # Target source files
