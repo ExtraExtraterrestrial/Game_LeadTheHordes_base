@@ -3,7 +3,7 @@ include(FetchContent)
 
 project(LeadTheHordes)
 
-# configs
+### CONFIGS ###
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
@@ -23,9 +23,7 @@ add_compile_definitions(SFML_STATIC)
 # endif()
 
 
-
-
-# set variables
+### VARIABLES ###
 if(CMAKE_SIZEOF_VOID_P EQUAL 8)
     set(ARCHITECTURE x64)
 else()
@@ -46,7 +44,7 @@ set(CMAKE_LIBRARY_OUTPUT_DIRECTORY_DEBUG    ${CMAKE_SOURCE_DIR}/lib/${CMAKE_SYST
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY_RELEASE  ${CMAKE_SOURCE_DIR}/lib/${CMAKE_SYSTEM_NAME}_${CMAKE_CXX_COMPILER_ID}_RELEASE-${ARCHITECTURE})
 
 
-
+### DEPENDENCIES ###
 FetchContent_Declare(SFML
     GIT_REPOSITORY  https://github.com/SFML/SFML.git
     GIT_TAG         2.6.x
@@ -60,58 +58,11 @@ FetchContent_MakeAvailable(SFML)
 
 add_subdirectory(Eris_Log)
 
-add_executable(LeadTheHordes)
+add_subdirectory(LeadTheHordes)
+
+### LINKING AND MISC ###
+
 set_property(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY VS_STARTUP_PROJECT LeadTheHordes)
-
-
-set_property(TARGET LeadTheHordes PROPERTY VS_DEBUGGER_WORKING_DIRECTORY "$<TARGET_FILE_DIR:LeadTheHordes>")
-
-
-if(WIN32)
-    add_custom_command(
-        TARGET LeadTheHordes
-        PRE_BUILD COMMAND ${CMAKE_COMMAND} 
-        ARGS -E copy ${SFML_SOURCE_DIR}/extlibs/bin/${ARCHITECTURE}/openal32.dll $<TARGET_FILE_DIR:LeadTheHordes>
-        COMMENT Copying OpenAL dll to output directory
-        VERBATIM
-    )
-endif()
-
-add_custom_command(
-    TARGET LeadTheHordes
-    POST_BUILD
-    COMMAND ${CMAKE_COMMAND}
-    ARGS -E copy_directory ${CMAKE_SOURCE_DIR}/LeadTheHordes/config $<TARGET_FILE_DIR:LeadTheHordes>/config
-    COMMENT Copying configs to output directory
-    VERBATIM
-)
-
-# set definition HORDES_DEBUG or HORDES_RELEASE
-target_compile_definitions (LeadTheHordes
-    PRIVATE HORDES_$<$<CONFIG:Debug>:DEBUG>$<$<CONFIG:Release>:RELEASE>
-)
-
-
-# SOURCES - all the source files of LeadTheHordes
-file(GLOB_RECURSE SOURCES CONFIGURE_DEPENDS
-    ${CMAKE_SOURCE_DIR}/LeadTheHordes/src/*.cpp
-    ${CMAKE_SOURCE_DIR}/LeadTheHordes/src/*.tpp
-    ${CMAKE_SOURCE_DIR}/LeadTheHordes/src/*.hpp
-    ${CMAKE_SOURCE_DIR}/LeadTheHordes/src/*.h
-)
-
-# Target source files
-target_sources(LeadTheHordes PRIVATE ${SOURCES})
-
-# Precompiled headers
-target_precompile_headers(LeadTheHordes PRIVATE ${CMAKE_SOURCE_DIR}/LeadTheHordes/src/Hordes_pch.h)
-
-# Include directories
-target_include_directories(LeadTheHordes PRIVATE
-    ${CMAKE_SOURCE_DIR}/LeadTheHordes/src
-    ${CMAKE_SOURCE_DIR}/Eris_Log/include
-    ${CMAKE_SOURCE_DIR}/SFML/include
-)
 
 # Libraries
 target_link_directories(LeadTheHordes PRIVATE

@@ -15,9 +15,9 @@ public:
 
 	const char *getNowStr();
 
-	void update();
 
-	void changeFormat(const char* newFormat);
+	std::mutex mutex_update;
+	void update();
 
 	
 private:

@@ -34,6 +34,8 @@ void Log::info(Func func_name, File file_name, int codeline, H head, B body, ...
 			throw std::invalid_argument("Could not convert body. Isn't it too long? (over 255 chars)");
 	}
 
+	mutex_output.lock();
+
 	if (showThreatLevel == InfoLvl) {
 		if (verboseLevel >= LowVerbose) {
 			std::cout << std::left 
@@ -43,7 +45,7 @@ void Log::info(Func func_name, File file_name, int codeline, H head, B body, ...
 				<< file_name << ":" << codeline << "\n"
 				<< head	<< "\033[0m\n";
 
-			logFile << std::left
+			logOfstream << std::left
 				<< "[" << ELog::TimeFormatter::time.getNowStr()<< "]  "
 				<< std::setw(15) << "(INFO)"
 				<< std::setw(65) << func_name
@@ -52,16 +54,21 @@ void Log::info(Func func_name, File file_name, int codeline, H head, B body, ...
 		}
 		if (verboseLevel == FullVerbose && buf[0] != '\0') {
 			std::cout	<< buf << "\n";
-			logFile		<< buf << "\n";
+			logOfstream		<< buf << "\n";
 		}
 		std::cout << "\x1B[36m" << line << "\033[0m\n\n";
-		logFile << line << "\n\n";
-		logFile.flush();
+		logOfstream << line << "\n\n";
+		logOfstream.flush();
 	}
+
+	mutex_output.unlock();
 }
 
 template<typename Func, typename File, typename H>
 void Log::info(Func func_name, File file_name, int codeline, H head) {
+
+	mutex_output.lock();
+
 	if (showThreatLevel == InfoLvl) {
 		if (verboseLevel >= LowVerbose) {
 			std::cout << std::left 
@@ -71,7 +78,7 @@ void Log::info(Func func_name, File file_name, int codeline, H head) {
 				<< file_name << ":" << codeline << "\n"
 				<< head	<< "\033[0m\n";
 
-			logFile << std::left
+			logOfstream << std::left
 				<< "[" << ELog::TimeFormatter::time.getNowStr()<< "]  "
 				<< std::setw(15) << "(INFO)"
 				<< std::setw(65) << func_name
@@ -79,9 +86,10 @@ void Log::info(Func func_name, File file_name, int codeline, H head) {
 				<< head	<< "\n";
 		}
 		std::cout << "\x1B[36m" << line << "\033[0m\n\n";
-		logFile << line << "\n\n";
-		logFile.flush();
+		logOfstream << line << "\n\n";
+		logOfstream.flush();
 	}
+	mutex_output.unlock();
 }
 
 
@@ -116,6 +124,7 @@ void Log::success(Func func_name, File file_name, int codeline, H head, B body, 
 			throw std::invalid_argument("Could not convert body. Isn't it too long? (over 255 chars)");
 	}
 
+	mutex_output.lock();
 	if (showThreatLevel == InfoLvl) {
 		if (verboseLevel >= LowVerbose) {
 			std::cout << std::left 
@@ -124,7 +133,7 @@ void Log::success(Func func_name, File file_name, int codeline, H head, B body, 
 				<< std::setw(65) << func_name
 				<< file_name << ":" << codeline << "\n"
 				<< head	<< "\033[0m\n";
-			logFile << std::left
+			logOfstream << std::left
 				<< "[" << ELog::TimeFormatter::time.getNowStr()<< "]  "
 				<< std::setw(15) << "(SUCCESS)"
 				<< std::setw(65) << func_name
@@ -133,16 +142,18 @@ void Log::success(Func func_name, File file_name, int codeline, H head, B body, 
 		}
 		if (verboseLevel == FullVerbose && buf[0] != '\0') {
 			std::cout	<< buf << "\n";
-			logFile		<< buf << "\n";
+			logOfstream		<< buf << "\n";
 		}
 		std::cout << "\x1B[32m" << this->line << "\033[0m\n\n";
-		logFile << line << "\n\n";
-		logFile.flush();
+		logOfstream << line << "\n\n";
+		logOfstream.flush();
 	}
+	mutex_output.unlock();
 }
 
 template<typename Func, typename File, typename H>
 void Log::success(Func func_name, File file_name, int codeline, H head) {
+	mutex_output.lock();
 	if (showThreatLevel == InfoLvl) {
 		if (verboseLevel >= LowVerbose) {
 			std::cout << std::left 
@@ -151,7 +162,7 @@ void Log::success(Func func_name, File file_name, int codeline, H head) {
 				<< std::setw(65) << func_name
 				<< file_name << ":" << codeline << "\n"
 				<< head	<< "\033[0m\n";
-			logFile << std::left
+			logOfstream << std::left
 				<< "[" << ELog::TimeFormatter::time.getNowStr()<< "]  "
 				<< std::setw(15) << "(SUCCESS)"
 				<< std::setw(65) << func_name
@@ -159,9 +170,10 @@ void Log::success(Func func_name, File file_name, int codeline, H head) {
 				<< head	<< "\n";
 		}
 		std::cout << "\x1B[32m" << this->line << "\033[0m\n\n";
-		logFile << line << "\n\n";
-		logFile.flush();
+		logOfstream << line << "\n\n";
+		logOfstream.flush();
 	}
+	mutex_output.unlock();
 }
 
 
@@ -196,6 +208,8 @@ void Log::warn(Func func_name, File file_name, int codeline, H head, B body, ...
 			throw std::invalid_argument("Could not convert body. Isn't it too long? (over 255 chars)");
 	}
 
+	mutex_output.lock();
+
 	if (showThreatLevel >= WarningLvl) {
 		if (verboseLevel >= LowVerbose) {
 			std::cout << std::left 
@@ -204,7 +218,7 @@ void Log::warn(Func func_name, File file_name, int codeline, H head, B body, ...
 				<< std::setw(65) << func_name
 				<< file_name << ":" << codeline << "\n"
 				<< head	<< "\033[0m\n";
-			logFile << std::left
+			logOfstream << std::left
 				<< "[" << ELog::TimeFormatter::time.getNowStr()<< "]  "
 				<< std::setw(15) << "(WARNING)"
 				<< std::setw(65) << func_name
@@ -213,17 +227,21 @@ void Log::warn(Func func_name, File file_name, int codeline, H head, B body, ...
 		}
 		if (verboseLevel == FullVerbose && buf[0] != '\0') {
 			std::cout	<< buf << "\n";
-			logFile		<< buf << "\n";
+			logOfstream		<< buf << "\n";
 		}
 		std::cout << "\x1B[33m" << line << "\033[0m\n\n";
-		logFile << line << "\n\n";
+		logOfstream << line << "\n\n";
 
-		logFile.flush();
+		logOfstream.flush();
 	}
+	mutex_output.unlock();
 }
 
 template<typename Func, typename File, typename H>
 void Log::warn(Func func_name, File file_name, int codeline, H head) {
+
+	mutex_output.lock();
+
 	if (showThreatLevel >= WarningLvl) {
 		if (verboseLevel >= LowVerbose) {
 			std::cout << std::left 
@@ -232,7 +250,7 @@ void Log::warn(Func func_name, File file_name, int codeline, H head) {
 				<< std::setw(65) << func_name
 				<< file_name << ":" << codeline << "\n"
 				<< head	<< "\033[0m\n";
-			logFile << std::left
+			logOfstream << std::left
 				<< "[" << ELog::TimeFormatter::time.getNowStr()<< "]  "
 				<< std::setw(15) << "(WARNING)"
 				<< std::setw(65) << func_name
@@ -240,10 +258,11 @@ void Log::warn(Func func_name, File file_name, int codeline, H head) {
 				<< head	<< "\n";
 		}
 		std::cout << "\x1B[33m" << line << "\033[0m\n\n";
-		logFile << line << "\n\n";
+		logOfstream << line << "\n\n";
 
-		logFile.flush();
+		logOfstream.flush();
 	}
+	mutex_output.unlock();
 }
 
 
@@ -277,6 +296,8 @@ void Log::error(Func func_name, File file_name, int codeline, H head, B body, ..
 		if (r < 0)
 			throw std::invalid_argument("Could not convert body. Isn't it too long? (over 255 chars)");
 	}
+	
+	mutex_output.lock();
 
 	if (verboseLevel >= LowVerbose) {
 		std::cout << std::left 
@@ -285,7 +306,7 @@ void Log::error(Func func_name, File file_name, int codeline, H head, B body, ..
 			<< std::setw(65) << func_name
 			<< file_name << ":" << codeline << "\n"
 			<< head	<< "\033[0m\n";
-		logFile << std::left
+		logOfstream << std::left
 			<< "[" << ELog::TimeFormatter::time.getNowStr()<< "]  "
 			<< std::setw(15) << "(ERROR)"
 			<< std::setw(65) << func_name
@@ -294,16 +315,18 @@ void Log::error(Func func_name, File file_name, int codeline, H head, B body, ..
 	}
 	if (verboseLevel == FullVerbose && buf[0] != '\0') {
 		std::cout	<< buf << "\n";
-		logFile		<< buf << "\n";
+		logOfstream		<< buf << "\n";
 	}
 	std::cout << "\x1B[31m" << line << "\033[0m\n\n";
-	logFile << line << "\n\n";
-	logFile.flush();
+	logOfstream << line << "\n\n";
+	logOfstream.flush();
+
+	mutex_output.unlock();
 }
 
 template<typename Func, typename File, typename H>
 void Log::error(Func func_name, File file_name, int codeline, H head) {
-	char buf[256];
+	mutex_output.lock();
 
 	if (verboseLevel >= LowVerbose) {
 		std::cout << std::left 
@@ -312,7 +335,7 @@ void Log::error(Func func_name, File file_name, int codeline, H head) {
 			<< std::setw(65) << func_name
 			<< file_name << ":" << codeline << "\n"
 			<< head	<< "\033[0m\n";
-		logFile << std::left
+		logOfstream << std::left
 			<< "[" << ELog::TimeFormatter::time.getNowStr()<< "]  "
 			<< std::setw(15) << "(ERROR)"
 			<< std::setw(65) << func_name
@@ -320,8 +343,10 @@ void Log::error(Func func_name, File file_name, int codeline, H head) {
 			<< head	<< "\n";
 	}
 	std::cout << "\x1B[31m" << line << "\033[0m\n\n";
-	logFile << line << "\n\n";
-	logFile.flush();
+	logOfstream << line << "\n\n";
+	logOfstream.flush();
+
+	mutex_output.unlock();
 }
 
 
@@ -329,6 +354,7 @@ void Log::error(Func func_name, File file_name, int codeline, H head) {
 template<typename Func, typename File, typename H, typename B>
 void Log::assert_(Func func_name, File file_name, int codeline, bool condition, H head, B body, ...) {
 	if (condition) {
+		
 		char buf[256];
 
 		if constexpr (std::is_same_v<B, const char*>) {
@@ -357,6 +383,8 @@ void Log::assert_(Func func_name, File file_name, int codeline, bool condition, 
 				throw std::invalid_argument("Could not convert body. Isn't it too long? (over 255 chars)");
 		}
 
+		mutex_output.lock();
+
 		if (verboseLevel >= LowVerbose) {
 			std::cout << std::left
 				<< "\x1B[31m[" << ELog::TimeFormatter::time.getNowStr() << "]  "
@@ -364,7 +392,7 @@ void Log::assert_(Func func_name, File file_name, int codeline, bool condition, 
 				<< std::setw(65) << func_name
 				<< file_name << ":" << codeline << "\n"
 				<< head << "\033[0m\n";
-			logFile << std::left
+			logOfstream << std::left
 				<< "[" << ELog::TimeFormatter::time.getNowStr() << "]  "
 				<< std::setw(15) << "(ASSERTION)"
 				<< std::setw(65) << func_name
@@ -373,17 +401,22 @@ void Log::assert_(Func func_name, File file_name, int codeline, bool condition, 
 		}
 		if (verboseLevel == FullVerbose && buf[0] != '\0') {
 			std::cout	<< buf << "\n";
-			logFile		<< buf << "\n";
+			logOfstream		<< buf << "\n";
 		}
 		std::cout << "\x1B[31m" << line << "\033[0m\n\n";
-		logFile << line << "\n\n";
-		logFile.flush();
+		logOfstream << line << "\n\n";
+		logOfstream.flush();
+
+		mutex_output.unlock();
 	}
 }
 
 template<typename Func, typename File, typename H>
 void Log::assert_(Func func_name, File file_name, int codeline, bool condition, H head) {
 	if (condition) {
+
+		mutex_output.lock();
+
 		if (verboseLevel >= LowVerbose) {
 			std::cout << std::left 
 				<< "\x1B[31m[" << ELog::TimeFormatter::time.getNowStr() << "]  "
@@ -391,7 +424,7 @@ void Log::assert_(Func func_name, File file_name, int codeline, bool condition, 
 				<< std::setw(65) << func_name
 				<< file_name << ":" << codeline << "\n"
 				<< head	<< "\033[0m\n";
-			logFile << std::left
+			logOfstream << std::left
 				<< "[" << ELog::TimeFormatter::time.getNowStr()<< "]  "
 				<< std::setw(15) << "(ASSERTION)"
 				<< std::setw(65) << func_name
@@ -399,8 +432,11 @@ void Log::assert_(Func func_name, File file_name, int codeline, bool condition, 
 				<< head	<< "\n";
 		}
 		std::cout << "\x1B[31m" << line << "\033[0m\n\n";
-		logFile << line << "\n\n";
-		logFile.flush();
+		logOfstream << line << "\n\n";
+		logOfstream.flush();
+	
+		mutex_output.unlock();
 	}
 }
-}
+
+} // namespace ELog

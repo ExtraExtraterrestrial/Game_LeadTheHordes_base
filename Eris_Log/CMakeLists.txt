@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.16)
+cmake_minimum_required(VERSION 3.28)
 
 project(Eris_Log LANGUAGES CXX)
 
@@ -7,8 +7,6 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
-set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
-option(BUILD_SHARED_LIBS "Build shared libraries" OFF)
 
 # Target source files
 # target_sources(Eris_Log PRIVATE
@@ -21,7 +19,7 @@ add_library(Eris_Log STATIC
 )
 
 
-# set definition HORDES_DEBUG or HORDES_RELEASE
+# set definitions
 target_compile_definitions (Eris_Log
     PRIVATE LOG_DO_NOT_AUTOSTART
 )

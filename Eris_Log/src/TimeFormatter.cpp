@@ -2,6 +2,7 @@
 #include <ctime>
 #include <cstring>
 #include <string>
+#include <mutex>
 
 #include "Eris_Log/TimeFormatter.h"
 
@@ -41,7 +42,7 @@ TimeFormatter::TimeFormatter() {
 	std::time(&last_raw_time);
 	localtime_s(&last_tm_time, &last_raw_time);
 
-	strncpy_s(time_format, "%d %b %Y - %H:%M:%S", strlen("%d %b %Y - %H:%M:%S") + 1);
+	strncpy_s(time_format, "%H:%M:%S - %d %b %Y", strlen("%H:%M:%S - %d %b %Y") + 1);
 
 	strftime(str, 64, time_format, &last_tm_time);
 }
@@ -55,14 +56,13 @@ const char *TimeFormatter::getNowStr() {
 }
 
 void TimeFormatter::update() {
+	mutex_update.lock();
+	
 	std::time(&last_raw_time);
 	localtime_s(&last_tm_time, &last_raw_time);
 	strftime(str, 64, time_format, &last_tm_time);
-}
-
-void TimeFormatter::changeFormat(const char* newFormat) {
-	strncpy_s(time_format, newFormat, strlen(newFormat) + 1);
-	strftime(str, 64, time_format, &last_tm_time);
+	
+	mutex_update.unlock();
 }
 
 }

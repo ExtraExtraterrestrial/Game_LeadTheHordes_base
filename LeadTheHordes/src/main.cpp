@@ -4,7 +4,7 @@
 
 int main() {
 
-    ELog::Log::Get().startup("LeadTheHordes-");
+    ELog::Log::Get().startup("LeadTheHordes_");
 
     LTH::GameEngine game;
     game.run();

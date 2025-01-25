@@ -38,12 +38,11 @@ Log::Log(int threatLevel, int verboseLevel)
 
 Log::~Log() {
 	info(__FUNCTION__, __LOG_FILENAME__, __LINE__, "Session ended");
-	logFile.close();
+	logOfstream.close();
 }
 
 
 void Log::startup(std::string_view filePrefix) {
-
 	std::string filePath = "logs";
 	filePath += DIR_DELIMITER;
 	filePath += TimeFormatter::programStart.getStr();
@@ -71,46 +70,46 @@ void Log::startup(std::string_view filePrefix) {
 
 
 	std::cout << std::boolalpha << std::left;
-	std::cout << (LOG_DEBUG_CHAR == "D" ? "\x1B[35m[DEBUG]\033[0m" : "\x1B[35m[RELEASE]\033[0m") << std::endl;
+	std::cout << (LOG_DEBUG_CHAR == "D" ? "\x1B[35m[DEBUG]\033[0m" : "\x1B[35m[RELEASE]\033[0m") << "\n";
 	
 	#if defined(_MSC_FULL_VER)
-		std::cout << std::setw(36) << "\x1B[35m[VS STUDIO VERSION]\033[0m" << _MSC_FULL_VER << std::endl;
-		std::cout << std::setw(36) << "\x1B[35m[C++ VERSION]\033[0m" << _MSVC_LANG << std::endl << std::endl;
+		std::cout << std::setw(36) << "\x1B[35m[VS STUDIO VERSION]\033[0m" << _MSC_FULL_VER << "\n";
+		std::cout << std::setw(36) << "\x1B[35m[C++ VERSION]\033[0m" << _MSVC_LANG << "\n\n";
 	#elif defined(__GNUG__)
-		std::cout << std::setw(36) << "\x1B[35m[GCC VERSION]\033[0m" << __GNUC__ << "." << __GNUC_MINOR__ << "." << __GNUC_PATCHLEVEL__ << std::endl;
-		std::cout << std::setw(36) << "\x1B[35m[C++ VERSION]\033[0m" << __cplusplus << std::endl << std::endl;
+		std::cout << std::setw(36) << "\x1B[35m[GCC VERSION]\033[0m" << __GNUC__ << "." << __GNUC_MINOR__ << "." << __GNUC_PATCHLEVEL__ << "\n";
+		std::cout << std::setw(36) << "\x1B[35m[C++ VERSION]\033[0m" << __cplusplus << "\n\n";
 	#else
-		std::cout << std::setw(36) << "\x1B[35m[UNKNOWN COMPILATOR]\033[0m" << std::endl;
+		std::cout << std::setw(36) << "\x1B[35m[MISC COMPILATOR]\033[0m\n";
 	#endif
 
 
-	std::cout << std::setw(36) << "\x1B[35m[START TIME]\033[0m" << TimeFormatter::datetime.getNowStr() << std::endl;
+	std::cout << std::setw(36) << "\x1B[35m[START TIME] \033[0m" << TimeFormatter::datetime.getNowStr() << "\n";
 	std::cout << "\x1B[35m" << line << "\033[0m\n" << std::endl;
 
 
-	logFile.open(logFilePath);
-	if (logFile.is_open()) {
-		logFile << std::boolalpha << std::left;
-		logFile << (LOG_DEBUG_CHAR == "D" ? "[DEBUG]" : "[RELEASE]") << std::endl;
-	
-		#if defined(_MSC_FULL_VER)
-			logFile << std::setw(36) << "[VS STUDIO VERSION]" << _MSC_FULL_VER << std::endl;
-			logFile << std::setw(36) << "[C++ VERSION]" << _MSVC_LANG << std::endl << std::endl;
-		#elif defined(__GNUG__)
-			logFile << std::setw(36) << "\x1B[35m[GCC VERSION]\033[0m" << __GNUC__ << "." << __GNUC_MINOR__ << "." << __GNUC_PATCHLEVEL__ << std::endl;
-			logFile << std::setw(36) << "\x1B[35m[C++ VERSION]\033[0m" << __cplusplus << std::endl << std::endl;
-		#else
-			logFile << std::setw(36) << "\x1B[35m[UNKNOWN COMPILATOR]\033[0m" << std::endl;
-		#endif
+	logOfstream.open(logFilePath);
+	if (logOfstream.is_open()) {
+		logOfstream << std::boolalpha << std::left;
+		logOfstream << (LOG_DEBUG_CHAR == "D" ? "[DEBUG]" : "[RELEASE]") << "\n";
 
-		logFile << std::setw(36) << "[START TIME]" << TimeFormatter::datetime.getNowStr() << std::endl;
-		logFile << line << std::endl;
+#if defined(_MSC_FULL_VER)
+		logOfstream << std::setw(36) << "[VS STUDIO VERSION]" << _MSC_FULL_VER << "\n";
+		logOfstream << std::setw(36) << "[C++ VERSION]" << _MSVC_LANG << "\n\n";
+#elif defined(__GNUG__)
+		logOfstream << std::setw(36) << "\x1B[35m[GCC VERSION]\033[0m" << __GNUC__ << "." << __GNUC_MINOR__ << "." << __GNUC_PATCHLEVEL__ << "\n";
+		logOfstream << std::setw(36) << "\x1B[35m[C++ VERSION]\033[0m" << __cplusplus << "\n\n";
+#else
+		logOfstream << std::setw(36) << "\x1B[35m[UNKNOWN COMPILATOR]\033[0m\n";
+#endif
+
+		logOfstream << std::setw(36) << "[START TIME: " << TimeFormatter::datetime.getNowStr() << "]\n";
+		logOfstream << line << std::endl;
 
 	} else {
 
-		std::cout << std::left 
+		std::cout << std::left
 			<< "\x1B[31m[" << TimeFormatter::time.getNowStr() << "]  " << "(ERROR)\n"
-			<< "FAILED TO OPEN LOG FILE" << "\033[0m\n" << logFilePath << "\n";
+			<< "FAILED TO OPEN LOG FILE" << "\033[0m\n" << logFilePath << std::endl;
 
 		commandBuffer  = "pause ";
 		commandBuffer += NULL_FILE_REDIRECT;

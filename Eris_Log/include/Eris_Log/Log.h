@@ -3,6 +3,7 @@
 #include <cstdarg>
 #include <iomanip>
 #include <cstring>
+#include <mutex>
 // #include "../src/Log.tpp" at the bottom
 
 
@@ -48,8 +49,8 @@ private:
 
 	char logFilePath[128];
 	std::string commandBuffer;
-
-	std::ofstream logFile;
+	
+	std::ofstream logOfstream;
 
 	short bodyLen;			// specifies how many character per line (after 3 tabs)
 	char line[128];			// remember to change it each time
@@ -67,9 +68,11 @@ public:
 	inline void setThreatLevel(int threatLevel) { this->showThreatLevel = (ThreatLevels)threatLevel; }
 	inline void setVerboseLevel(int verbLevel) { this->showThreatLevel = (ThreatLevels)verbLevel; }
 
+	std::mutex mutex_output;
 	// definitions in Log.tpp since they're templates
 	template<typename Func = std::string_view, typename File = std::string_view, typename H = std::string_view, typename B = std::string_view>
 	void info(Func func_name, File file_name, int line, H head, B body, ...);
+	
 	template<typename Func = std::string_view, typename File = std::string_view, typename H = std::string_view>
 	void info(Func func_name, File file_name, int line, H head);
 
