@@ -8,7 +8,7 @@ cmake -B build
 cmake --build build
 </pre>
 
-### Technologies needed:
+### Technologies used:
 | Technology | Description |
 |------------|-------------------------------------------------|
 | CMake      | Required pre-install - https://cmake.org/download/ |
