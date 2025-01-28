@@ -4,8 +4,8 @@ This is the repo in which I'll develop the *minimal viable product* version of a
 ## Building
 To the CMake project, I suggest using the following commands:
 <pre>
-cmake -B build
-cmake --build build
+cmake .
+cmake --build .
 </pre>
 
 ### Technologies used:
